@@ -85,7 +85,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const body = await req.json();
     const parsed = gradeSchema.safeParse({ marks: Number(body.marks), feedback: body.feedback });
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const submission = await Submission.findByIdAndUpdate(
