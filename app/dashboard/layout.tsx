@@ -17,11 +17,13 @@ import {
   Bell,
   Search,
   ChevronRight,
+  Calendar,
 } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
 
 const TEACHER_NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/calendar', label: 'Calendar', icon: Calendar },
   { href: '/dashboard/classrooms', label: 'Classrooms', icon: BookOpen },
   { href: '/dashboard/assignments', label: 'Assignments', icon: ClipboardList },
   { href: '/dashboard/students', label: 'Students', icon: Users },
@@ -30,6 +32,7 @@ const TEACHER_NAV = [
 
 const STUDENT_NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/calendar', label: 'Calendar', icon: Calendar },
   { href: '/dashboard/classrooms', label: 'My Classes', icon: BookOpen },
   { href: '/dashboard/assignments', label: 'Assignments', icon: ClipboardList },
   { href: '/dashboard/profile', label: 'Profile', icon: Settings },
