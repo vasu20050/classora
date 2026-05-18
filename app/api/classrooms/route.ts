@@ -2,77 +2,54 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { Classroom } from '@/models/Classroom';
 import { getAuthUser } from '@/lib/auth';
-import { classroomSchema } from '@/lib/validations';
-import { generateClassCode, getColorFromString } from '@/lib/utils';
+import { joinClassSchema } from '@/lib/validations';
 
-// GET /api/classrooms — list classrooms for authenticated user
-export async function GET(req: NextRequest) {
-  try {
-    const user = await getAuthUser(req);
-    if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-
-    await connectDB();
-
-    let classrooms;
-    if (user.role === 'teacher') {
-      classrooms = await Classroom.find({ teacher: user.userId })
-        .populate('teacher', 'name email avatar')
-        .populate('students', 'name email avatar')
-        .sort({ createdAt: -1 });
-    } else {
-      classrooms = await Classroom.find({ students: user.userId })
-        .populate('teacher', 'name email avatar')
-        .populate('students', 'name email avatar')
-        .sort({ createdAt: -1 });
-    }
-
-    return NextResponse.json({ success: true, data: classrooms });
-  } catch (error) {
-    console.error('[CLASSROOMS GET ERROR]', error);
-    return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 });
-  }
-}
-
-// POST /api/classrooms — create a new classroom (teachers only)
+// POST /api/classrooms/join — student joins by code
 export async function POST(req: NextRequest) {
   try {
     const user = await getAuthUser(req);
     if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-    if (user.role !== 'teacher') {
-      return NextResponse.json({ success: false, error: 'Only teachers can create classrooms' }, { status: 403 });
+    if (user.role !== 'student') {
+      return NextResponse.json({ success: false, error: 'Only students can join classrooms' }, { status: 403 });
     }
 
     await connectDB();
 
     const body = await req.json();
-    const parsed = classroomSchema.safeParse(body);
+    const parsed = joinClassSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
-    const { name, subject, section, description } = parsed.data;
+    const { code } = parsed.data;
+    const classroom = await Classroom.findOne({ code: code.toUpperCase() });
 
-    // Generate unique 6-char code
-    let code = generateClassCode();
-    while (await Classroom.findOne({ code })) {
-      code = generateClassCode(); // retry on collision
+    if (!classroom) {
+      return NextResponse.json({ success: false, error: 'No classroom found with this code' }, { status: 404 });
     }
 
-    const classroom = await Classroom.create({
-      name,
-      subject,
-      section,
-      description,
-      teacher: user.userId,
-      code,
-      coverColor: getColorFromString(name),
-    });
+    // Check if already enrolled
+    if (classroom.students.some((s: { toString: () => string }) => s.toString() === user.userId)) {
+      return NextResponse.json({ success: false, error: 'You are already enrolled in this classroom' }, { status: 409 });
+    }
+
+    // Check if student is the teacher
+    if (classroom.teacher.toString() === user.userId) {
+      return NextResponse.json({ success: false, error: 'You cannot join your own classroom' }, { status: 400 });
+    }
+
+    classroom.students.push(user.userId as unknown as typeof classroom.students[0]);
+    await classroom.save();
 
     await classroom.populate('teacher', 'name email avatar');
 
-    return NextResponse.json({ success: true, data: classroom }, { status: 201 });
+    return NextResponse.json({
+      success: true,
+      data: classroom,
+      message: `Joined "${classroom.name}" successfully!`,
+    });
   } catch (error) {
-    console.error('[CLASSROOM CREATE ERROR]', error);
+    console.error('[JOIN CLASS ERROR]', error);
     return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 });
   }
 }
