@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = assignmentSchema.safeParse({ ...body, totalMarks: Number(body.totalMarks) });
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const { title, description, dueDate, totalMarks, classroomId } = parsed.data;
