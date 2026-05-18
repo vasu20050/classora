@@ -1,54 +1,72 @@
-# Classora
+# Classora 🎓
 
-Classora is a modern, lightweight education platform inspired by Google Classroom, designed specifically for college students and educators. Built with Next.js App Router, Tailwind CSS, and MongoDB.
+Classora is a modern, premium, and highly responsive learning management platform inspired by Google Classroom. Designed specifically for college students and educators, it delivers an immersive, dark-themed virtual learning space built with state-of-the-art web technologies.
 
-## Features
+Deploy is successfully completed and live on **Vercel**! 🚀
 
-- **Role-based Auth:** Separate flows and dashboards for `students` and `teachers`.
-- **Classroom Management:** Teachers can create classrooms; students can join using a 6-character code.
-- **Assignments:** Post assignments, attach deadlines, and track submissions.
-- **Grading System:** Review student submissions, assign marks, and leave feedback.
-- **Live Stream:** Post announcements and updates directly to the classroom feed.
-- **Premium UI:** Dark-mode by default, built with Tailwind v4, glassmorphism, and responsive design.
+---
 
-## Tech Stack
+## ✨ Features
 
-- **Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS v4, Lucide React
-- **Backend:** Next.js API Routes (Serverless/Edge ready), Node.js
-- **Database:** MongoDB + Mongoose
-- **Auth:** JWT (Jose library for Edge compatibility), HTTP-only cookies
-- **Validation:** Zod, React Hook Form
+- **🔑 Multi-Role Authentication:** Dedicated dashboards, navigation structures, and workspaces custom-tailored for `students` and `teachers`.
+- **🏫 Classroom Management:** Teachers can create virtual classrooms instantly; students can enroll seamlessly using an automated 6-character unique class code.
+- **📅 Dynamic Calendar Dashboard:** A fully interactive calendar module for both roles to visualize scheduling, track assignments, and view upcoming class deadlines with a premium responsive layout.
+- **📝 Assignments & Grading:** 
+  - Teachers can post assignments, set due dates, attach descriptions, grade student submissions, and leave detailed feedback.
+  - Students can upload work, track assignment statuses, and receive instant grading alerts.
+- **📣 Classroom Stream:** Real-time announcements, instructions, and communication feeds directly within each classroom.
+- **🎨 Premium UI/UX:** Built with glassmorphism aesthetics, deep cosmic dark default theme (`bg-[#04040f]`), smooth transitions, responsive layouts, and modern typography.
 
-## Getting Started
+---
 
-1. **Clone and Install:**
-   ```bash
-   npm install
-   ```
+## 🛠️ Tech Stack
 
-2. **Environment Variables:**
-   Create a `.env.local` file in the root directory:
-   ```env
-   MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/classora
-   JWT_SECRET=your_super_secret_jwt_key
-   ```
+- **Core & Framework:** Next.js (App Router), React, Tailwind CSS, Lucide Icons, Date-fns (Calendar Engine)
+- **Database:** MongoDB + Mongoose (Optimized async pre-save hooks & connection pooling)
+- **Security & Auth:** JSON Web Tokens (JWT) powered by the edge-compatible `jose` library, stored in secure HTTP-only cookies.
+- **Validation:** Strong compile-time and runtime validation using **Zod** schema parser.
 
-3. **Run the Development Server:**
-   ```bash
-   npm run dev
-   ```
+---
 
-4. **Open Application:**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+## 🚀 Getting Started
 
-## Architecture
+### 1. Installation
+Clone the repository and install all dependencies:
+```bash
+npm install
+```
 
-- `app/api/*`: Backend REST endpoints.
-- `app/dashboard/*`: Protected dashboard layout and pages.
-- `models/*`: Mongoose database schemas.
-- `contexts/AuthContext.tsx`: Global auth state and JWT token management.
-- `lib/validations/`: Shared Zod schemas for frontend and backend validation.
+### 2. Environment Setup
+Create a `.env.local` file in the root directory and configure the following variables:
+```env
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/classora
+JWT_SECRET=your_secure_jwt_secret_key
+```
 
-## Design
+### 3. Run Development Server (with Auto-Browser Launch)
+We have optimized the dev workflow with an automated browser launcher script:
+```bash
+npm run dev
+```
+*This launches the Next.js server and automatically opens `http://localhost:3000` in your default browser once the server is ready!*
 
-The UI utilizes a deep dark theme (`bg-[#04040f]`) with vibrant gradients (Violet to Indigo). It uses subtle `backdrop-blur` for a glassmorphism effect, giving it a premium, native-app feel suitable for a modern SaaS product.
+---
+
+## 📦 Deployment Configuration
+
+Classora is optimized for serverless hosting on **Vercel**:
+
+1. **Environment Variables**: Make sure to set `MONGODB_URI` and `JWT_SECRET` in your **Vercel Project Settings > Environment Variables**.
+2. **Build Safety**: Mongoose connection helpers are fully optimized to ensure the application builds cleanly during Vercel's static analysis phase.
+
+---
+
+## 📂 Codebase Architecture
+
+- `app/api/` — Backend serverless REST endpoints with typecheck-safe Zod validation.
+- `app/dashboard/` — Protected role-based workspaces and layouts.
+- `app/dashboard/calendar/` — The interactive schedule & assignment calendar view.
+- `models/` — Scalable database schemas for User, Classroom, Assignment, and Submission.
+- `lib/db.ts` — Connection pooling wrapper for MongoDB Atlas.
+- `lib/auth.ts` — Middleware helpers, token verification, and session context hooks.
+- `scripts/dev.js` — Custom development launcher for optimized local startup.
