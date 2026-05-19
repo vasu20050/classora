@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classora - Modern LMS Showcase</title>
+  <title>Classora - Modern LMS Prototype</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -15,706 +15,1290 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #04040f;
     }
-    /* Glassmorphism scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.02);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    /* Ambient glow */
+    /* Ambient glows */
     .glow-purple {
-      filter: blur(120px);
+      filter: blur(140px);
       background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
     }
     .glow-indigo {
-      filter: blur(120px);
+      filter: blur(140px);
       background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+    }
+    /* Dynamic transitions */
+    .fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body class="text-white min-h-screen relative overflow-x-hidden">
 
-  <!-- Ambient Lights -->
-  <div class="absolute top-0 left-1/4 w-[500px] h-[500px] glow-purple pointer-events-none z-0"></div>
-  <div class="absolute top-1/3 right-1/4 w-[400px] h-[400px] glow-indigo pointer-events-none z-0"></div>
+  <!-- Glow effects behind layout -->
+  <div class="absolute top-0 left-1/4 w-[600px] h-[600px] glow-purple pointer-events-none z-0"></div>
+  <div class="absolute bottom-10 right-1/4 w-[500px] h-[500px] glow-indigo pointer-events-none z-0"></div>
 
-  <!-- Header Navigation -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#04040f]/75 border-b border-white/5 backdrop-blur-xl transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <!-- Logo -->
-      <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('landing')">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
-          <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+  <!-- ==================== FRONTEND CONTROLLER LAYER ==================== -->
+
+  <!-- PUBLIC SITE WRAPPER (Landing, Login, Signup) -->
+  <div id="wrapper-public" class="relative z-10 min-h-screen flex flex-col justify-between">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#04040f]/80 backdrop-blur-xl">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('landing')">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+              <i data-lucide="graduation-cap" class="w-4.5 h-4.5 text-white"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight">Classora</span>
+          </div>
+
+          <div class="hidden md:flex items-center gap-8">
+            <a href="#features" class="text-sm text-white/60 hover:text-white transition-colors">Features</a>
+            <a href="#testimonials" class="text-sm text-white/60 hover:text-white transition-colors">Testimonials</a>
+            <a href="#stats" class="text-sm text-white/60 hover:text-white transition-colors">Stats</a>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="switchView('login')" class="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-1.5">Sign in</button>
+            <button onclick="switchView('signup')" class="text-sm font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white px-4 py-2 rounded-lg transition-all duration-200">Get Started</button>
+          </div>
         </div>
-        <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-white/90 to-white/60 bg-clip-text text-transparent">Classora</span>
-        <span class="text-[10px] uppercase font-bold tracking-widest text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full border border-violet-500/20">Showcase</span>
+      </div>
+    </nav>
+
+    <!-- Page: Landing -->
+    <main id="page-landing" class="pt-32 pb-24 px-4 sm:px-6 lg:px-8 flex-1">
+      <div class="max-w-5xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-sm text-white/70 mb-8">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-violet-400"></i>
+          Modern classroom for the next generation
+        </div>
+
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
+          Learn without <span class="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">limits.</span><br>
+          Teach without <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">friction.</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Classora brings students and educators together in a fast, clean, and modern platform. Create classes, post assignments, and track progress — all in one place.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <button onclick="switchView('signup')" class="group flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-200 hover:shadow-2xl hover:shadow-violet-500/30 hover:-translate-y-0.5">
+            Start for free
+            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </button>
+          <button onclick="switchView('login')" class="flex items-center gap-2 text-white/70 hover:text-white font-medium px-8 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-200 hover:bg-white/5">
+            Sign in to sandbox
+          </button>
+        </div>
+
+        <!-- Trust tags -->
+        <div class="flex items-center justify-center gap-6 mt-12 flex-wrap text-sm text-white/50">
+          <div class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> No card required</div>
+          <div class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Local simulator</div>
+          <div class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Dynamic calendar</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Page: Login -->
+    <main id="page-login" class="hidden pt-32 pb-24 px-4 flex-1 flex items-center justify-center">
+      <div class="bg-[#08081a] border border-white/5 rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-24 h-24 bg-violet-600/20 rounded-full blur-2xl"></div>
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold">Welcome back</h2>
+          <p class="text-sm text-white/50 mt-1">Select a mock account or use sandbox credentials</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-white/5 border border-white/5 p-4 rounded-2xl">
+            <h3 class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Sandbox Speed-Login</h3>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="loginAs('teacher')" class="bg-violet-600 hover:bg-violet-500 text-xs text-white font-bold p-2.5 rounded-xl transition-all">Teacher Sandbox</button>
+              <button onclick="loginAs('student')" class="bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-bold p-2.5 rounded-xl transition-all">Student Sandbox</button>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-white/60 mb-1.5">Email Address</label>
+              <input type="email" id="login-email" placeholder="e.g. arjun@classora.com" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-white/60 mb-1.5">Password</label>
+              <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            </div>
+          </div>
+
+          <button onclick="submitLogin()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3.5 rounded-xl transition-all shadow-lg shadow-violet-500/10 mt-2">
+            Sign In
+          </button>
+
+          <p class="text-center text-xs text-white/40 mt-4">Don't have an account? <span onclick="switchView('signup')" class="text-violet-400 hover:underline cursor-pointer">Sign up here</span></p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Page: Signup -->
+    <main id="page-signup" class="hidden pt-32 pb-24 px-4 flex-1 flex items-center justify-center">
+      <div class="bg-[#08081a] border border-white/5 rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-24 h-24 bg-violet-600/20 rounded-full blur-2xl"></div>
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold">Create your account</h2>
+          <p class="text-sm text-white/50 mt-1">Start learning or teaching today</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex gap-2 p-1 bg-white/5 border border-white/10 rounded-xl">
+            <button id="btn-signup-role-student" onclick="setSignupRole('student')" class="flex-1 text-xs font-bold py-2 rounded-lg bg-violet-600 text-white transition-all">Student</button>
+            <button id="btn-signup-role-teacher" onclick="setSignupRole('teacher')" class="flex-1 text-xs font-bold py-2 rounded-lg text-white/50 hover:text-white transition-all">Teacher</button>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-white/60 mb-1.5">Full Name</label>
+              <input type="text" id="signup-name" placeholder="e.g. Priya Sharma" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-white/60 mb-1.5">Email Address</label>
+              <input type="email" id="signup-email" placeholder="e.g. priya@iitd.ac.in" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-white/60 mb-1.5">Password</label>
+              <input type="password" id="signup-password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            </div>
+          </div>
+
+          <button onclick="submitSignup()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3.5 rounded-xl transition-all shadow-lg shadow-violet-500/10 mt-2">
+            Create Sandbox Account
+          </button>
+
+          <p class="text-center text-xs text-white/40 mt-4">Already registered? <span onclick="switchView('login')" class="text-violet-400 hover:underline cursor-pointer">Sign in here</span></p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+            <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-white"></i>
+          </div>
+          <span class="font-semibold">Classora</span>
+        </div>
+        <p class="text-sm text-white/30">© 2026 Classora. Dedicated to advanced local pair programming showcase.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- AUTHENTICATED SYSTEM WRAPPER (Side navigation + Routing Panels) -->
+  <div id="wrapper-auth" class="hidden min-h-screen bg-[#060614] text-white flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#08081a] border-r border-white/5 flex flex-col flex-shrink-0">
+      <!-- Logo -->
+      <div class="flex items-center gap-2.5 px-5 h-16 border-b border-white/5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-white"></i>
+        </div>
+        <span class="text-lg font-bold tracking-tight">Classora</span>
       </div>
 
-      <!-- Navigation links (dynamic) -->
-      <nav id="nav-links" class="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
-        <a href="#features" onclick="switchView('landing')" class="hover:text-white transition-colors">Features</a>
-        <a href="#testimonials" onclick="switchView('landing')" class="hover:text-white transition-colors">Testimonials</a>
-        <a href="#stats" onclick="switchView('landing')" class="hover:text-white transition-colors">Stats</a>
+      <!-- Current Logged In User Pill -->
+      <div class="mx-3 mt-4 p-3 rounded-xl bg-white/4 border border-white/5">
+        <div class="flex items-center gap-3">
+          <div id="sidebar-user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+            PS
+          </div>
+          <div class="min-w-0 flex-1">
+            <p id="sidebar-user-name" class="text-sm font-medium truncate"></p>
+            <p id="sidebar-user-role" class="text-xs text-white/40 capitalize"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Sidebar Navigation -->
+      <nav id="sidebar-navigation" class="flex-1 px-3 py-6 space-y-1">
+        <!-- Renders based on role -->
       </nav>
 
-      <!-- Action Button / User Role Switcher -->
-      <div class="flex items-center gap-3">
-        <!-- Dashboard Toggle Options -->
-        <div id="role-selector" class="hidden flex items-center bg-white/5 border border-white/10 rounded-xl p-1 gap-1">
-          <button onclick="toggleRole('teacher')" id="btn-role-teacher" class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200">
-            <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Teacher</span>
-          </button>
-          <button onclick="toggleRole('student')" id="btn-role-student" class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200">
-            <span class="flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5"></i> Student</span>
-          </button>
+      <!-- Logout button -->
+      <div class="px-3 pb-4">
+        <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/40 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-150">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          Sign out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- Sticky Topbar Header -->
+      <header class="sticky top-0 z-30 h-16 border-b border-white/5 bg-[#060614]/90 backdrop-blur-xl flex items-center gap-3 px-6">
+        <!-- Search bar -->
+        <div class="flex items-center gap-2 flex-1 max-w-xs bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white/40">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <input type="text" id="global-search-input" placeholder="Search classrooms..." oninput="handleGlobalSearch(this.value)" class="bg-transparent border-none outline-none text-white text-xs placeholder:text-white/30 w-full">
         </div>
 
-        <button onclick="switchView('login')" id="nav-cta" class="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/20 active:scale-95">
-          Get Started
-        </button>
-      </div>
-    </div>
-  </header>
+        <!-- Notification center and avatar -->
+        <div class="ml-auto flex items-center gap-3">
+          <button class="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/5 text-white/50 hover:text-white transition-colors">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full"></span>
+          </button>
 
-  <!-- ==================== LANDING VIEW ==================== -->
-  <main id="view-landing" class="pt-24 pb-16 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Hero Section -->
-    <section class="text-center py-20 relative">
-      <div class="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-4 py-1.5 text-xs text-violet-300 font-semibold mb-8 animate-pulse">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Interactive Premium Prototype
-      </div>
-      <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight leading-tight mb-6">
-        Learn without <span class="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">limits.</span><br>
-        Teach without <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">friction.</span>
-      </h1>
-      <p class="text-white/60 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-        Classora is a beautiful, cosmic-themed dashboard featuring automatic classroom code entries, real-time grading, announcement streams, and an interactive schedule calendar.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <button onclick="switchView('dashboard')" class="group flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-200 hover:shadow-2xl hover:shadow-violet-500/30 hover:-translate-y-0.5">
-          Enter Live Sandbox
-          <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-        </button>
-        <button onclick="switchView('login')" class="flex items-center gap-2 text-white/70 hover:text-white font-medium px-8 py-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-200 hover:bg-white/5">
-          Sign In Options
-        </button>
-      </div>
-    </section>
-
-    <!-- Interactive Features Grid -->
-    <section id="features" class="py-16">
-      <div class="text-center mb-12">
-        <span class="text-xs font-bold uppercase tracking-widest text-violet-400 bg-violet-500/10 px-3 py-1 rounded-full border border-violet-500/20">Unified Hub</span>
-        <h2 class="text-3xl font-bold mt-3">Interactive Workspace Modules</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 group hover:-translate-y-1">
-          <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400 mb-4 group-hover:bg-violet-500 group-hover:text-white transition-all">
-            <i data-lucide="book-open" class="w-5 h-5"></i>
+          <div id="topbar-user-avatar" class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-sm font-bold">
+            PS
           </div>
-          <h3 class="font-bold text-lg mb-2">Classroom Streams</h3>
-          <p class="text-sm text-white/50 leading-relaxed">Dynamic announcement feeds allowing seamless teacher notices and student updates with interactive code enrollment.</p>
         </div>
-        <div class="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 group hover:-translate-y-1">
-          <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4 group-hover:bg-indigo-500 group-hover:text-white transition-all">
-            <i data-lucide="calendar" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-lg mb-2">Dynamic Schedule Calendar</h3>
-          <p class="text-sm text-white/50 leading-relaxed">A beautifully responsive monthly calendar view mapping deadlines, announcements, and events in real-time.</p>
-        </div>
-        <div class="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 group hover:-translate-y-1">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-            <i data-lucide="clipboard-list" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-lg mb-2">Assignments & Grading</h3>
-          <p class="text-sm text-white/50 leading-relaxed">Submit links, files, and resources. Empowering educators with inline feedback, score evaluations, and instant marks.</p>
-        </div>
-      </div>
-    </section>
-  </main>
+      </header>
 
-  <!-- ==================== LOGIN VIEW ==================== -->
-  <main id="view-login" class="hidden pt-32 pb-16 max-w-md mx-auto px-4 relative z-10">
-    <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-2xl shadow-2xl relative overflow-hidden">
-      <!-- Glow decoration -->
-      <div class="absolute -top-10 -right-10 w-24 h-24 bg-violet-600/30 rounded-full blur-2xl pointer-events-none"></div>
+      <!-- Routing Container -->
+      <main class="flex-1 p-8 overflow-y-auto z-10 relative">
 
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold">Welcome back</h2>
-        <p class="text-sm text-white/50 mt-1">Select a role to instantly log in to the sandbox</p>
-      </div>
-
-      <div class="space-y-4">
-        <button onclick="loginAs('teacher')" class="w-full group flex items-center justify-between bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-4 rounded-2xl transition-all duration-200 hover:shadow-xl active:scale-98">
-          <span class="flex items-center gap-3">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
-            Teacher Sandbox
-          </span>
-          <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-        </button>
-
-        <button onclick="loginAs('student')" class="w-full group flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-semibold p-4 rounded-2xl transition-all duration-200 active:scale-98">
-          <span class="flex items-center gap-3">
-            <i data-lucide="user" class="w-5 h-5"></i>
-            Student Sandbox
-          </span>
-          <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-        </button>
-      </div>
-
-      <div class="mt-8 text-center text-xs text-white/40">
-        Local sandbox session uses client-side localStorage. No database required for trial.
-      </div>
-    </div>
-  </main>
-
-  <!-- ==================== DASHBOARD VIEW ==================== -->
-  <main id="view-dashboard" class="hidden pt-20 pb-16 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Top Dashboard Header with Role Alert & Actions -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
-      <div>
-        <div class="flex items-center gap-2">
-          <h2 class="text-2xl font-bold tracking-tight" id="welcome-message">Welcome to Classora</h2>
-          <span id="role-badge" class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"></span>
-        </div>
-        <p class="text-sm text-white/50 mt-1">Manage classrooms, announcements, and track assignment calendars</p>
-      </div>
-
-      <!-- Action Button depending on role -->
-      <div class="flex items-center gap-3">
-        <!-- View Selector Buttons -->
-        <div class="flex bg-white/5 border border-white/10 rounded-xl p-1 gap-1">
-          <button onclick="setDashboardTab('classes')" id="tab-classes" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-600 text-white transition-all flex items-center gap-1.5">
-            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Classes
-          </button>
-          <button onclick="setDashboardTab('calendar')" id="tab-calendar" class="text-xs font-semibold px-3 py-1.5 rounded-lg text-white/60 hover:text-white transition-all flex items-center gap-1.5">
-            <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Calendar
-          </button>
-        </div>
-
-        <button onclick="openActionModal()" id="btn-dashboard-action" class="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-2">
-          <!-- Text set dynamically -->
-        </button>
-      </div>
-    </div>
-
-    <!-- Active Tab Panel 1: Classes Grid / Single Class View -->
-    <div id="tab-panel-classes" class="space-y-8">
-      <!-- Grid of enrolled/created classrooms -->
-      <div id="classes-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Dynamic classes list goes here -->
-      </div>
-
-      <!-- Single Classroom View (Initially hidden, revealed when user clicks a class card) -->
-      <div id="single-class-view" class="hidden space-y-6">
-        <!-- Back button -->
-        <button onclick="backToClassesGrid()" class="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors bg-white/5 px-3 py-1.5 rounded-xl border border-white/5">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Classrooms
-        </button>
-
-        <!-- Classroom Cover / Jumbotron -->
-        <div id="class-jumbotron" class="relative rounded-3xl overflow-hidden p-8 sm:p-12 bg-gradient-to-br from-violet-600 to-indigo-900 border border-white/10 shadow-xl">
-          <div class="absolute inset-0 bg-black/20"></div>
-          <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- ==================== TAB: DASHBOARD HOME ==================== -->
+        <div id="panel-dashboard" class="route-panel fade-in space-y-8 hidden">
+          <!-- Header Greeting -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 id="jumbo-class-name" class="text-3xl sm:text-4xl font-extrabold tracking-tight"></h3>
-              <p id="jumbo-class-subject" class="text-white/80 mt-1 text-lg font-medium"></p>
+              <h1 class="text-2xl font-bold flex items-center gap-2">
+                Good <span id="greeting-time">day</span>, <span id="greeting-name" class="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">User</span> 👋
+              </h1>
+              <p id="dashboard-subtitle" class="text-white/50 text-sm mt-1"></p>
             </div>
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex flex-col items-center">
-              <span class="text-[10px] uppercase font-bold tracking-widest text-violet-200">Classroom Code</span>
-              <span id="jumbo-class-code" class="text-2xl font-mono font-bold tracking-wider mt-1 text-white"></span>
+            <div id="dashboard-header-actions">
+              <!-- Render dynamic action buttons depending on teacher vs student -->
             </div>
           </div>
-        </div>
 
-        <!-- Two Column Layout: Feed / Announcements vs Assignments -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Main Content: Announcements / Post announcement -->
-          <div class="lg:col-span-2 space-y-6">
-            <!-- Create Announcement -->
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-md">
-              <h4 class="font-bold mb-3 flex items-center gap-2"><i data-lucide="message-square" class="w-4 h-4 text-violet-400"></i> Share something with your class</h4>
-              <textarea id="announcement-text" placeholder="Write announcements, reminders, or general instructions..." class="w-full bg-[#08081a] border border-white/10 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-violet-500 transition-all resize-none h-24"></textarea>
-              <div class="flex justify-end mt-3">
-                <button onclick="postAnnouncement()" class="bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-all">
-                  Post Stream
+          <!-- Dynamic Statistics Grid -->
+          <div id="stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Dynamic stats card generated dynamically -->
+          </div>
+
+          <!-- Two-column dashboards overview -->
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <!-- Classroom list -->
+            <div class="lg:col-span-3 bg-white/4 border border-white/6 rounded-2xl p-6">
+              <div class="flex items-center justify-between mb-5">
+                <h2 class="font-semibold text-white/80">Your Classrooms</h2>
+                <button onclick="navigateTo('classrooms')" class="text-xs text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors">
+                  View all <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
+              <div id="dashboard-classrooms-list" class="space-y-3">
+                <!-- Lists active class cards -->
+              </div>
             </div>
 
-            <!-- Feed -->
-            <div id="announcement-stream" class="space-y-4">
-              <!-- Dynamic stream items -->
-            </div>
-          </div>
-
-          <!-- Sidebar: Assignments Card -->
-          <div class="space-y-6">
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-md">
-              <div class="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
-                <h4 class="font-bold flex items-center gap-2"><i data-lucide="clipboard-list" class="w-4 h-4 text-indigo-400"></i> Assignments</h4>
-                <button onclick="openAssignmentModal()" id="btn-create-assignment" class="hidden text-xs bg-indigo-500/20 text-indigo-300 font-semibold px-2.5 py-1 rounded-lg border border-indigo-500/30 hover:bg-indigo-500 hover:text-white transition-all">
-                  + Create
+            <!-- Upcoming/Alert panels -->
+            <div class="lg:col-span-2 bg-white/4 border border-white/6 rounded-2xl p-6">
+              <div class="flex items-center justify-between mb-5">
+                <h2 class="font-semibold text-white/80">Upcoming Deadlines</h2>
+                <button onclick="navigateTo('assignments')" class="text-xs text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors">
+                  View all <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
-
-              <!-- Assignments list inside class -->
-              <div id="class-assignments-list" class="space-y-3">
-                <!-- Dynamic assignments go here -->
+              <div id="dashboard-deadlines-list" class="space-y-3">
+                <!-- Dynamic cards with Urgent Alert colors -->
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Active Tab Panel 2: Interactive Calendar -->
-    <div id="tab-panel-calendar" class="hidden space-y-6">
-      <div class="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-        <!-- Calendar Header control -->
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400">
-              <i data-lucide="calendar" class="w-5 h-5"></i>
+        <!-- ==================== TAB: CALENDAR ==================== -->
+        <div id="panel-calendar" class="route-panel fade-in space-y-6 hidden">
+          <div class="bg-white/4 border border-white/6 rounded-3xl p-6">
+            <!-- Calendar Header controls -->
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400">
+                  <i data-lucide="calendar" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 id="cal-heading-title" class="text-xl font-bold"></h3>
+                  <p class="text-xs text-white/50">Assignment deadlines mapped dynamically</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="changeCalMonth(-1)" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                <button onclick="changeCalMonth(1)" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-all"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+              </div>
             </div>
+
+            <!-- Days name -->
+            <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold text-white/40 tracking-wider">
+              <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <!-- Month dynamic grid -->
+            <div id="cal-monthly-grid" class="grid grid-cols-7 gap-2 min-h-[350px]"></div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: CLASSROOMS OVERVIEW ==================== -->
+        <div id="panel-classrooms" class="route-panel fade-in space-y-8 hidden">
+          <!-- Classrooms Roster -->
+          <div id="classroom-roster-view" class="space-y-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <h1 class="text-2xl font-bold">Classrooms</h1>
+                <p class="text-sm text-white/50">Browse and manage active courses</p>
+              </div>
+              <div id="classroom-action-button-container"></div>
+            </div>
+            <div id="classrooms-overview-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+          </div>
+
+          <!-- Classroom Expanded Detail Room -->
+          <div id="classroom-expanded-view" class="hidden space-y-6">
+            <button onclick="closeClassroomExpand()" class="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors bg-white/5 px-3 py-1.5 rounded-xl border border-white/5">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Classrooms
+            </button>
+
+            <!-- Jumbo Header Cover -->
+            <div id="expanded-classroom-cover" class="relative rounded-3xl overflow-hidden p-8 sm:p-12 border border-white/10 shadow-xl bg-gradient-to-br">
+              <div class="absolute inset-0 bg-black/20"></div>
+              <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 id="expanded-class-title" class="text-3xl sm:text-4xl font-extrabold tracking-tight"></h3>
+                  <p id="expanded-class-subject" class="text-white/80 mt-1 text-lg font-medium"></p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex flex-col items-center">
+                  <span class="text-[10px] uppercase font-bold tracking-widest text-violet-200">Classroom Code</span>
+                  <span id="expanded-class-code" class="text-2xl font-mono font-bold tracking-wider mt-1 text-white"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabs: Stream, People, Assignments -->
+            <div class="flex border-b border-white/5 p-1 gap-4">
+              <button onclick="setClassroomTab('stream')" id="subtab-stream" class="text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white">Stream Feed</button>
+              <button onclick="setClassroomTab('people')" id="subtab-people" class="text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white">People Directory</button>
+              <button onclick="setClassroomTab('assignments')" id="subtab-assignments" class="text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white">Assignments</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <!-- Stream & People Section -->
+              <div class="lg:col-span-2 space-y-6">
+                <!-- Sub-tab 1: Stream -->
+                <div id="classroom-subtab-stream-panel" class="space-y-6">
+                  <!-- Post Box -->
+                  <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                    <textarea id="expanded-announcement-textarea" placeholder="Share something with your classroom..." class="w-full bg-[#08081a] border border-white/10 rounded-xl p-4 text-sm focus:outline-none focus:border-violet-500 transition-all h-20 resize-none"></textarea>
+                    <div class="flex justify-end mt-3">
+                      <button onclick="handlePostAnnouncement()" class="bg-violet-600 hover:bg-violet-500 text-xs font-semibold px-4 py-2 rounded-xl transition-all">Post Announcement</button>
+                    </div>
+                  </div>
+                  <!-- Renders Feed -->
+                  <div id="expanded-announcements-feed" class="space-y-4"></div>
+                </div>
+
+                <!-- Sub-tab 2: People -->
+                <div id="classroom-subtab-people-panel" class="hidden space-y-6">
+                  <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-white/40 mb-3">Teachers</h3>
+                    <div id="classroom-teachers-list" class="space-y-2"></div>
+                  </div>
+                  <div class="border-t border-white/5 pt-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-white/40 mb-3">Classmates</h3>
+                    <div id="classroom-classmates-list" class="space-y-2"></div>
+                  </div>
+                </div>
+
+                <!-- Sub-tab 3: Classroom Assignments -->
+                <div id="classroom-subtab-assignments-panel" class="hidden space-y-4">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-white/60">Classwork List</h3>
+                    <div id="btn-create-assignment-in-class"></div>
+                  </div>
+                  <div id="classroom-inner-assignments-list" class="space-y-3"></div>
+                </div>
+              </div>
+
+              <!-- Sidebar deadlines -->
+              <div class="space-y-6">
+                <div class="bg-white/4 border border-white/6 rounded-2xl p-5">
+                  <h4 class="font-bold text-sm text-white/80 border-b border-white/5 pb-2 mb-3">Upcoming Tasks</h4>
+                  <div id="classroom-sidebar-assignments" class="space-y-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: ASSIGNMENTS CENTRAL HUB ==================== -->
+        <div id="panel-assignments" class="route-panel fade-in space-y-6 hidden">
+          <div class="flex items-center justify-between">
             <div>
-              <h3 id="calendar-title" class="text-xl font-bold"></h3>
-              <p class="text-xs text-white/50">Assignment deadlines mapped dynamically</p>
+              <h1 class="text-2xl font-bold">Assignments Hub</h1>
+              <p class="text-sm text-white/50">Manage, submit and evaluate course assignments</p>
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button onclick="prevMonth()" class="p-2 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 text-white transition-all">
-              <i data-lucide="chevron-left" class="w-4 h-4"></i>
-            </button>
-            <button onclick="nextMonth()" class="p-2 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 text-white transition-all">
-              <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </button>
+          <!-- Tabs: Upcoming vs Completed -->
+          <div class="flex border-b border-white/5 p-1 gap-4">
+            <button onclick="setAssignmentTab('upcoming')" id="tab-assign-upcoming" class="text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white">Upcoming Assignments</button>
+            <button onclick="setAssignmentTab('completed')" id="tab-assign-completed" class="text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white">Submitted & Graded</button>
+          </div>
+
+          <div id="assignments-hub-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Dynamic assignments based on selected sub-tab -->
           </div>
         </div>
 
-        <!-- Calendar Month Grid -->
-        <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold text-white/40 tracking-wider">
-          <div>Sun</div>
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div>Sat</div>
+        <!-- ==================== TAB: STUDENTS LIST (TEACHER) ==================== -->
+        <div id="panel-students" class="route-panel fade-in space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold">Students Directory</h1>
+              <p id="students-aggregate-subtitle" class="text-white/50 text-sm mt-1"></p>
+            </div>
+          </div>
+
+          <!-- Aggregation Search Input -->
+          <div class="relative max-w-sm">
+            <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
+            <input type="text" id="students-search-input" oninput="handleStudentsSearch(this.value)" placeholder="Search by student name or email..." class="w-full bg-white/4 border border-white/8 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-violet-500 transition-all">
+          </div>
+
+          <!-- Aggregated student list -->
+          <div class="rounded-2xl border border-white/6 overflow-hidden">
+            <div class="grid grid-cols-12 px-5 py-3 bg-white/3 border-b border-white/5 text-xs font-semibold uppercase tracking-wider text-white/30">
+              <div class="col-span-5">Student</div>
+              <div class="col-span-4">Email</div>
+              <div class="col-span-3">Classes Enrolled</div>
+            </div>
+            <div id="students-aggregated-rows" class="divide-y divide-white/5">
+              <!-- Dynamically populated aggregate rows -->
+            </div>
+          </div>
+
+          <!-- Classroom roster cards -->
+          <div class="space-y-3">
+            <h2 class="text-sm font-semibold text-white/50 uppercase tracking-wider">Breakdown By Classroom</h2>
+            <div id="classroom-aggregated-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          </div>
         </div>
 
-        <!-- Days Grid -->
-        <div id="calendar-days-grid" class="grid grid-cols-7 gap-2 min-h-[350px]">
-          <!-- Days will be dynamically rendered -->
+        <!-- ==================== TAB: PROFILE ==================== -->
+        <div id="panel-profile" class="route-panel fade-in space-y-6 hidden">
+          <h1 class="text-2xl font-bold">Account Settings</h1>
+          <div class="bg-white/4 border border-white/6 rounded-3xl p-8 max-w-2xl">
+            <div class="flex items-center gap-4 mb-8">
+              <div id="profile-editor-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-2xl font-bold shadow-lg"></div>
+              <div>
+                <h3 id="profile-editor-badge" class="font-extrabold text-xl"></h3>
+                <p id="profile-editor-role" class="text-sm text-violet-400 capitalize font-medium mt-0.5"></p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-white/60 mb-1.5">Full Name</label>
+                  <input type="text" id="profile-input-name" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-white/60 mb-1.5">Email Address</label>
+                  <input type="email" id="profile-input-email" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+                </div>
+              </div>
+              <div class="border-t border-white/5 pt-4 mt-4">
+                <label class="block text-xs font-semibold text-white/60 mb-1.5">Password</label>
+                <input type="password" id="profile-input-password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+              </div>
+              <button onclick="handleUpdateProfile()" class="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-all mt-4">
+                Save Account Updates
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+
+      </main>
     </div>
-  </main>
+  </div>
 
-  <!-- ==================== MODALS ==================== -->
-  <!-- 1. Create/Join Class Modal -->
-  <div id="modal-classroom" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm">
+  <!-- ==================== DIALOGS / POPUPS ==================== -->
+  <!-- Classroom Modal -->
+  <div id="modal-class-action" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
     <div class="bg-[#08081a] border border-white/10 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-      <button onclick="closeActionModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60 hover:text-white transition-all">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-
-      <h3 id="modal-classroom-title" class="text-xl font-bold mb-4"></h3>
+      <button onclick="closeClassroomModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <h3 id="class-modal-title" class="text-xl font-bold mb-4"></h3>
 
       <div class="space-y-4">
-        <!-- Create Class Fields -->
-        <div id="fields-create-class" class="space-y-3 hidden">
+        <!-- Create forms -->
+        <div id="modal-class-create-form" class="space-y-3 hidden">
           <div>
             <label class="block text-xs font-semibold text-white/60 mb-1.5">Class Name</label>
-            <input type="text" id="input-class-name" placeholder="e.g. Computer Networks" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            <input type="text" id="class-input-name" placeholder="e.g. Machine Learning" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
           </div>
           <div>
             <label class="block text-xs font-semibold text-white/60 mb-1.5">Subject</label>
-            <input type="text" id="input-class-subject" placeholder="e.g. CSE-302" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+            <input type="text" id="class-input-subject" placeholder="e.g. CSE-401" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
           </div>
-        </div>
-
-        <!-- Join Class Fields -->
-        <div id="fields-join-class" class="space-y-3 hidden">
           <div>
-            <label class="block text-xs font-semibold text-white/60 mb-1.5">Classroom Code (6 characters)</label>
-            <input type="text" id="input-class-code" maxlength="6" placeholder="e.g. XJ78AB" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white font-mono uppercase focus:outline-none focus:border-violet-500 transition-all tracking-wider text-center">
+            <label class="block text-xs font-semibold text-white/60 mb-1.5">Section / Classroom Room</label>
+            <input type="text" id="class-input-section" placeholder="e.g. Section-A" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
           </div>
         </div>
 
-        <button onclick="submitClassroomAction()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3.5 rounded-xl transition-all mt-4">
-          Confirm Action
+        <!-- Join forms -->
+        <div id="modal-class-join-form" class="space-y-3 hidden">
+          <div>
+            <label class="block text-xs font-semibold text-white/60 mb-1.5">6-Character Classroom Code</label>
+            <input type="text" id="class-input-code" maxlength="6" placeholder="e.g. MS248K" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm font-mono text-center uppercase tracking-wider focus:outline-none focus:border-violet-500">
+          </div>
+        </div>
+
+        <button onclick="submitClassroomAction()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3 rounded-xl transition-all">
+          Execute Code
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 2. Create Assignment Modal -->
-  <div id="modal-assignment" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm">
+  <!-- Create Assignment Modal -->
+  <div id="modal-create-assign" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
     <div class="bg-[#08081a] border border-white/10 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-      <button onclick="closeAssignmentModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60 hover:text-white transition-all">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-
-      <h3 class="text-xl font-bold mb-4">Create Assignment</h3>
+      <button onclick="closeCreateAssignmentModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <h3 class="text-xl font-bold mb-4">Create Course Assignment</h3>
 
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-white/60 mb-1.5">Title</label>
-          <input type="text" id="input-assign-title" placeholder="e.g. Midterm Lab Report" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+          <label class="block text-xs font-semibold text-white/60 mb-1.5">Assignment Title</label>
+          <input type="text" id="assign-input-title" placeholder="e.g. Lab Exercise 3" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-white/60 mb-1.5">Instructions</label>
-          <textarea id="input-assign-desc" placeholder="Provide full assignment details..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all h-20 resize-none"></textarea>
+          <label class="block text-xs font-semibold text-white/60 mb-1.5">Instruction Details</label>
+          <textarea id="assign-input-desc" placeholder="Explain the assignment expectations..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 h-20 resize-none"></textarea>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-white/60 mb-1.5">Due Date</label>
-          <input type="date" id="input-assign-date" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+          <label class="block text-xs font-semibold text-white/60 mb-1.5">Due Date Deadline</label>
+          <input type="date" id="assign-input-date" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 text-white">
         </div>
 
-        <button onclick="submitAssignment()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3.5 rounded-xl transition-all mt-4">
-          Assign to Students
+        <button onclick="submitCreateAssignment()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3 rounded-xl transition-all">
+          Deploy Assignment
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 3. Assignment Detail / Submit Modal -->
-  <div id="modal-submit" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm">
+  <!-- Submit Assignment & Grading Modal -->
+  <div id="modal-submit-grade" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
     <div class="bg-[#08081a] border border-white/10 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-      <button onclick="closeSubmitModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60 hover:text-white transition-all">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-
-      <h3 id="submit-assign-title" class="text-xl font-bold mb-1"></h3>
-      <p id="submit-assign-date" class="text-xs text-rose-400 mb-4 font-semibold"></p>
+      <button onclick="closeSubmitGradeModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <h3 id="grade-modal-assign-title" class="text-xl font-bold mb-1"></h3>
+      <p id="grade-modal-assign-date" class="text-xs text-rose-400 font-semibold mb-4"></p>
 
       <div class="space-y-4">
-        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
-          <span class="text-[10px] uppercase font-bold text-white/40 block">Instructions</span>
-          <p id="submit-assign-desc" class="text-sm text-white/80 mt-1 leading-relaxed"></p>
+        <div class="bg-white/5 border border-white/5 rounded-xl p-4">
+          <span class="text-[10px] font-bold text-white/40 uppercase block">Instructions</span>
+          <p id="grade-modal-assign-desc" class="text-sm text-white/85 mt-1 leading-relaxed"></p>
         </div>
 
-        <!-- Action Panel based on roles -->
-        <!-- Student Panel: submit task -->
-        <div id="student-submit-panel" class="space-y-3 hidden">
+        <!-- Student view -->
+        <div id="grade-modal-student-block" class="space-y-3 hidden">
           <div>
-            <label class="block text-xs font-semibold text-white/60 mb-1.5">Submit Link / Answer</label>
-            <input type="text" id="input-submit-url" placeholder="e.g. https://github.com/my-lab-repo" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all font-mono">
+            <label class="block text-xs font-semibold text-white/60 mb-1.5">Submission Link (GitHub/Docs/drive)</label>
+            <input type="text" id="grade-modal-submit-url" placeholder="https://github.com/my-submission" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm font-mono text-white focus:outline-none focus:border-violet-500">
           </div>
-          <button onclick="submitAssignmentWork()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold p-3 rounded-xl transition-all">
-            Turn In Assignment
-          </button>
+          <button onclick="submitAssignmentLink()" id="grade-modal-submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold p-3 rounded-xl transition-all"></button>
         </div>
 
-        <!-- Teacher Panel: view submissions & grade -->
-        <div id="teacher-grade-panel" class="space-y-3 hidden">
+        <!-- Teacher view -->
+        <div id="grade-modal-teacher-block" class="space-y-3 hidden">
           <div class="border-t border-white/5 pt-3">
             <h4 class="text-xs font-bold text-white/60 uppercase tracking-wider mb-2">Student Submissions</h4>
-            <div id="submissions-list" class="space-y-2 max-h-36 overflow-y-auto pr-1">
-              <!-- Dynamic items -->
-            </div>
+            <div id="grade-modal-submissions-feed" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript App Logic -->
+  <!-- JavaScript Application Simulator Engine -->
   <script>
-    // State management using LocalStorage
-    let state = {
-      role: 'teacher', // default
-      currentView: 'landing', // landing, login, dashboard
-      activeTab: 'classes', // classes, calendar
-      activeClassId: null,
+    // In-memory Database state
+    let appState = {
+      currentUser: null, // User Object (id, name, email, role)
+      currentView: 'landing', // landing, login, signup, dashboard-layout
+      activeTab: 'dashboard', // dashboard, calendar, classrooms, assignments, students, profile
+      signupRole: 'student', // student, teacher
+      activeClassroomId: null,
       activeAssignmentId: null,
-      classes: [],
-      submissions: [],
-      currentCalendarDate: new Date()
-    };
-
-    // Load initial seed state if localStorage is empty
-    function loadInitialSeedData() {
-      const stored = localStorage.getItem('classora_showcase_state');
-      if (stored) {
-        state = JSON.parse(stored);
-        state.currentCalendarDate = new Date(state.currentCalendarDate);
-        return;
-      }
-
-      // Pre-seed classrooms
-      state.classes = [
+      classroomSubtab: 'stream', // stream, people, assignments
+      assignmentsHubTab: 'upcoming', // upcoming, completed
+      calendarMonthOffset: 0,
+      globalSearch: '',
+      studentsSearch: '',
+      
+      // Core local database mock
+      users: [
+        { id: 'user-1', name: 'Prof. Arjun Mehta', email: 'arjun@classora.com', role: 'teacher' },
+        { id: 'user-2', name: 'Priya Sharma', email: 'priya@iitd.ac.in', role: 'student' },
+        { id: 'user-3', name: 'Zara Khan', email: 'zara@iimb.ac.in', role: 'student' },
+        { id: 'user-4', name: 'Nikhil Sen', email: 'nikhil@bits.ac.in', role: 'student' }
+      ],
+      classrooms: [
         {
-          id: 'class-1',
-          name: 'Computer Science 101',
-          subject: 'Introduction to Programming',
-          code: 'CS101A',
+          id: 'cls-1',
+          name: 'Computer Networks 101',
+          subject: 'CSE-302',
+          section: 'Section-A',
+          code: 'CN302X',
           teacherName: 'Prof. Arjun Mehta',
-          teacherId: 'teacher-1',
-          studentsEnrolled: ['student-1'],
+          teacherId: 'user-1',
+          students: ['user-2', 'user-3'],
           announcements: [
             {
               id: 'ann-1',
               author: 'Prof. Arjun Mehta',
-              authorRole: 'teacher',
-              text: 'Welcome to CS 101! Our lectures will start next Monday. Make sure to download the syllabus.',
-              date: new Date(Date.now() - 3600000 * 2).toISOString()
+              authorAvatar: 'AM',
+              text: 'Welcome to Computer Networks! The mid-term exams schedule is published. Please review chapters 1 to 4 on OSI levels.',
+              date: new Date(Date.now() - 3600000 * 20).toISOString(),
+              comments: [
+                { author: 'Priya Sharma', text: 'Thank you Professor! Will class resources be uploaded by Friday?', date: new Date(Date.now() - 3600000 * 18).toISOString() }
+              ]
             }
           ],
           assignments: [
-            {
-              id: 'assign-1',
-              title: 'Lab 1: Setup and Hello World',
-              desc: 'Install VS Code, set up Node.js environment, write a simple hello world script, and attach your repository link.',
-              dueDate: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0] // 3 days from now
-            }
+            { id: 'assign-1', title: 'OSI Reference Layer Mapping', desc: 'Design a detailed graphic flowchart representing all 7 layers of the OSI model, with protocol instances for each layers.', dueDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0] },
+            { id: 'assign-2', title: 'TCP/IP Packet Congestion Analysis', desc: 'Read packet logs inside the repository resource folder and write a 2-page response analyzing the TCP congestion window metrics.', dueDate: new Date(Date.now() - 86400000 * 4).toISOString().split('T')[0] }
           ]
         },
         {
-          id: 'class-2',
-          name: 'Business Analytics & Data',
-          subject: 'MBA Core 504',
-          code: 'MBA504',
+          id: 'cls-2',
+          name: 'Database Architectures',
+          subject: 'CS-403',
+          section: 'Section-B',
+          code: 'DB403M',
           teacherName: 'Prof. Arjun Mehta',
-          teacherId: 'teacher-1',
-          studentsEnrolled: ['student-1'],
+          teacherId: 'user-1',
+          students: ['user-2', 'user-4'],
           announcements: [],
-          assignments: []
+          assignments: [
+            { id: 'assign-3', title: 'PostgreSQL Indexes Performance Lab', desc: 'Create tables with 1 million records and contrast B-tree vs GIST query analytics.', dueDate: new Date(Date.now() + 86400000 * 6).toISOString().split('T')[0] }
+          ]
         }
-      ];
+      ],
+      submissions: [
+        { id: 'sub-1', assignmentId: 'assign-2', classroomId: 'cls-1', studentId: 'user-2', studentName: 'Priya Sharma', submitUrl: 'https://github.com/priya-codes/tcp-congestion-analysis', submittedAt: new Date(Date.now() - 86400000 * 5).toISOString(), grade: 92 },
+        { id: 'sub-2', assignmentId: 'assign-1', classroomId: 'cls-1', studentId: 'user-2', studentName: 'Priya Sharma', submitUrl: 'https://github.com/priya-codes/osi-layer-flowchart', submittedAt: new Date(Date.now() - 3600000 * 2).toISOString(), grade: null }
+      ]
+    };
 
-      state.submissions = [
-        {
-          id: 'sub-1',
-          assignmentId: 'assign-1',
-          classId: 'class-1',
-          studentName: 'Priya Sharma',
-          studentId: 'student-1',
-          submitUrl: 'https://github.com/priya-codes/cs101-lab1',
-          submittedAt: new Date().toISOString(),
-          grade: null,
-          feedback: ''
+    // Load persisted state if exists
+    function loadState() {
+      const stored = localStorage.getItem('classora_full_sandbox_state');
+      if (stored) {
+        try {
+          appState = JSON.parse(stored);
+        } catch(e) {
+          console.error(e);
         }
-      ];
-
-      saveState();
+      }
     }
 
     function saveState() {
-      localStorage.setItem('classora_showcase_state', JSON.stringify(state));
+      localStorage.setItem('classora_full_sandbox_state', JSON.stringify(appState));
     }
 
-    // Switch screen views
-    function switchView(viewName) {
-      state.currentView = viewName;
-      document.getElementById('view-landing').classList.add('hidden');
-      document.getElementById('view-login').classList.add('hidden');
-      document.getElementById('view-dashboard').classList.add('hidden');
-
-      const cta = document.getElementById('nav-cta');
-      const roleSelector = document.getElementById('role-selector');
-      const navLinks = document.getElementById('nav-links');
-
-      if (viewName === 'landing') {
-        document.getElementById('view-landing').classList.remove('hidden');
-        cta.style.display = 'block';
-        roleSelector.classList.add('hidden');
-        navLinks.classList.remove('hidden');
-      } else if (viewName === 'login') {
-        document.getElementById('view-login').classList.remove('hidden');
-        cta.style.display = 'none';
-        roleSelector.classList.add('hidden');
-        navLinks.classList.add('hidden');
-      } else if (viewName === 'dashboard') {
-        document.getElementById('view-dashboard').classList.remove('hidden');
-        cta.style.display = 'none';
-        roleSelector.classList.remove('hidden');
-        navLinks.classList.add('hidden');
-        renderDashboard();
-      }
-      lucide.createIcons();
+    // Dynamic initials
+    function getInitials(name) {
+      if (!name) return 'U';
+      const pts = name.split(' ');
+      return pts.map(p => p.charAt(0)).slice(0,2).join('').toUpperCase();
     }
 
-    // Login action mock
-    function loginAs(role) {
-      state.role = role;
-      toggleRole(role);
-      switchView('dashboard');
+    // Date formatting helper
+    function getDeadlineStatus(dueDateStr) {
+      const due = new Date(dueDateStr);
+      const now = new Date();
+      const diffTime = due - now;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays < 0) return { text: `Passed due (${Math.abs(diffDays)}d ago)`, urgent: true, label: 'past' };
+      if (diffDays === 0) return { text: 'Due today!', urgent: true, label: 'today' };
+      if (diffDays === 1) return { text: 'Due tomorrow', urgent: true, label: 'tomorrow' };
+      if (diffDays <= 3) return { text: `Due in ${diffDays} days`, urgent: true, label: 'soon' };
+      return { text: `Due: ${dueDateStr}`, urgent: false, label: 'normal' };
     }
 
-    // Toggle teacher vs student view
-    function toggleRole(role) {
-      state.role = role;
+    // Switch views between public site screens & logged-in dashboards
+    function switchView(view) {
+      appState.currentView = view;
       saveState();
 
-      // UI Indicators
-      const btnTeacher = document.getElementById('btn-role-teacher');
-      const btnStudent = document.getElementById('btn-role-student');
-      const roleBadge = document.getElementById('role-badge');
-      const welcome = document.getElementById('welcome-message');
+      const publicWrapper = document.getElementById('wrapper-public');
+      const authWrapper = document.getElementById('wrapper-auth');
 
-      if (role === 'teacher') {
-        btnTeacher.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-600 text-white transition-all shadow-md';
-        btnStudent.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg text-white/50 hover:text-white transition-all';
-        roleBadge.innerText = 'Teacher Account';
-        roleBadge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30';
-        welcome.innerText = 'Teacher Dashboard';
-        document.getElementById('btn-dashboard-action').innerHTML = '<i data-lucide="plus" class="w-4 h-4"></i> Create Classroom';
-        document.getElementById('btn-create-assignment').classList.remove('hidden');
-      } else {
-        btnTeacher.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg text-white/50 hover:text-white transition-all';
-        btnStudent.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition-all shadow-md';
-        roleBadge.innerText = 'Student Account';
-        roleBadge.className = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
-        welcome.innerText = 'Student Dashboard';
-        document.getElementById('btn-dashboard-action').innerHTML = '<i data-lucide="key" class="w-4 h-4"></i> Join Classroom';
-        document.getElementById('btn-create-assignment').classList.add('hidden');
-      }
+      // Hide all public screens
+      document.getElementById('page-landing').classList.add('hidden');
+      document.getElementById('page-login').classList.add('hidden');
+      document.getElementById('page-signup').classList.add('hidden');
 
-      // Reset Single view if active, or just re-render dashboard
-      if (state.activeClassId) {
-        openClassroom(state.activeClassId);
+      if (view === 'landing' || view === 'login' || view === 'signup') {
+        publicWrapper.classList.remove('hidden');
+        authWrapper.classList.add('hidden');
+        
+        if (view === 'landing') document.getElementById('page-landing').classList.remove('hidden');
+        if (view === 'login') document.getElementById('page-login').classList.remove('hidden');
+        if (view === 'signup') document.getElementById('page-signup').classList.remove('hidden');
       } else {
-        renderDashboard();
+        publicWrapper.classList.add('hidden');
+        authWrapper.classList.remove('hidden');
+        initSidebarNavigation();
+        navigateTo(appState.activeTab);
       }
       lucide.createIcons();
     }
 
-    // Toggle Tabs inside Dashboard
-    function setDashboardTab(tabName) {
-      state.activeTab = tabName;
-      const tabClasses = document.getElementById('tab-classes');
-      const tabCalendar = document.getElementById('tab-calendar');
-      const panelClasses = document.getElementById('tab-panel-classes');
-      const panelCalendar = document.getElementById('tab-panel-calendar');
+    // Dynamic navigation menu depending on user role
+    function initSidebarNavigation() {
+      const nav = document.getElementById('sidebar-navigation');
+      nav.innerHTML = '';
 
-      if (tabName === 'classes') {
-        tabClasses.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-600 text-white transition-all flex items-center gap-1.5 shadow-md';
-        tabCalendar.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg text-white/60 hover:text-white transition-all flex items-center gap-1.5';
-        panelClasses.classList.remove('hidden');
-        panelCalendar.classList.add('hidden');
-        renderDashboard();
-      } else {
-        tabClasses.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg text-white/60 hover:text-white transition-all flex items-center gap-1.5';
-        tabCalendar.className = 'text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-600 text-white transition-all flex items-center gap-1.5 shadow-md';
-        panelClasses.classList.add('hidden');
-        panelCalendar.classList.remove('hidden');
-        renderCalendar();
-      }
-      lucide.createIcons();
-    }
+      const u = appState.currentUser;
+      if (!u) return;
 
-    // Render Dashboard Class List
-    function renderDashboard() {
-      const grid = document.getElementById('classes-grid');
-      grid.innerHTML = '';
+      // Update sidebar avatar & details
+      document.getElementById('sidebar-user-name').innerText = u.name;
+      document.getElementById('sidebar-user-role').innerText = u.role;
+      document.getElementById('sidebar-user-avatar').innerText = getInitials(u.name);
+      document.getElementById('topbar-user-avatar').innerText = getInitials(u.name);
 
-      // Determine which classes to show (if student, only enrolled ones; if teacher, all for mock)
-      let visibleClasses = state.classes;
-      if (state.role === 'student') {
-        visibleClasses = state.classes.filter(c => c.studentsEnrolled.includes('student-1'));
+      const items = [
+        { tab: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+        { tab: 'calendar', label: 'Calendar', icon: 'calendar' },
+        { tab: 'classrooms', label: u.role === 'teacher' ? 'Classrooms' : 'My Classes', icon: 'book-open' },
+        { tab: 'assignments', label: 'Assignments', icon: 'clipboard-list' }
+      ];
+
+      if (u.role === 'teacher') {
+        items.push({ tab: 'students', label: 'Students', icon: 'users' });
       }
 
-      if (visibleClasses.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full text-center py-12 bg-white/2 border border-white/5 rounded-2xl p-8">
-            <i data-lucide="folder-open" class="w-12 h-12 text-white/30 mx-auto mb-3"></i>
-            <h4 class="font-bold text-lg">No classes found</h4>
-            <p class="text-sm text-white/50 mt-1">${state.role === 'teacher' ? 'Create a class to get started!' : 'Join a class using a 6-digit code.'}</p>
-          </div>
+      items.push({ tab: 'profile', label: 'Profile', icon: 'settings' });
+
+      items.forEach(item => {
+        const link = document.createElement('button');
+        link.onclick = () => navigateTo(item.tab);
+        const isActive = appState.activeTab === item.tab;
+        
+        link.className = `w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group ${
+          isActive
+            ? 'bg-violet-600/20 text-violet-300 border border-violet-500/20'
+            : 'text-white/50 hover:text-white hover:bg-white/5'
+        }`;
+
+        link.innerHTML = `
+          <i data-lucide="${item.icon}" class="w-4 h-4 flex-shrink-0 ${isActive ? 'text-violet-400' : ''}"></i>
+          <span>${item.label}</span>
+          ${isActive ? '<i data-lucide="chevron-right" class="w-3 h-3 ml-auto text-violet-400"></i>' : ''}
         `;
-        lucide.createIcons();
-        return;
-      }
-
-      visibleClasses.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'group p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between h-48';
-        card.onclick = () => openClassroom(c.id);
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-mono tracking-widest text-violet-400 font-bold bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">${c.code}</span>
-              <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
-            </div>
-            <h4 class="font-extrabold text-lg mt-4 group-hover:text-violet-400 transition-colors leading-tight">${c.name}</h4>
-            <p class="text-xs text-white/50 mt-1 font-medium">${c.subject}</p>
-          </div>
-          <div class="flex items-center justify-between border-t border-white/5 pt-4">
-            <span class="text-xs text-white/40 font-medium">Instructor: ${c.teacherName}</span>
-            <span class="text-xs text-white/40 flex items-center gap-1 font-medium"><i data-lucide="users" class="w-3.5 h-3.5"></i> ${c.studentsEnrolled.length}</span>
-          </div>
-        `;
-        grid.appendChild(card);
+        nav.appendChild(link);
       });
       lucide.createIcons();
     }
 
-    // Open Single Classroom stream
-    function openClassroom(classId) {
-      state.activeClassId = classId;
-      document.getElementById('classes-grid').classList.add('hidden');
-      document.getElementById('single-class-view').classList.remove('hidden');
+    // Panel tab switcher routing
+    function navigateTo(tab) {
+      appState.activeTab = tab;
+      saveState();
 
-      const c = state.classes.find(cls => cls.id === classId);
-      if (!c) return;
+      // Hide all panels
+      document.querySelectorAll('.route-panel').forEach(p => p.classList.add('hidden'));
 
-      document.getElementById('jumbo-class-name').innerText = c.name;
-      document.getElementById('jumbo-class-subject').innerText = c.subject;
-      document.getElementById('jumbo-class-code').innerText = c.code;
+      // Active selected nav
+      initSidebarNavigation();
 
-      renderAnnouncementsFeed();
-      renderAssignmentsList();
+      // Show panel
+      const targetPanel = document.getElementById(`panel-${tab}`);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+
+      // Load panel elements
+      if (tab === 'dashboard') loadDashboardPanel();
+      if (tab === 'calendar') renderMonthlyCalendar();
+      if (tab === 'classrooms') loadClassroomsPanel();
+      if (tab === 'assignments') loadAssignmentsPanel();
+      if (tab === 'students') loadStudentsPanel();
+      if (tab === 'profile') loadProfilePanel();
+
       lucide.createIcons();
     }
 
-    function backToClassesGrid() {
-      state.activeClassId = null;
-      document.getElementById('classes-grid').classList.remove('hidden');
-      document.getElementById('single-class-view').classList.add('hidden');
-      renderDashboard();
+    // Direct Quick log-ins
+    function loginAs(role) {
+      const u = appState.users.find(x => x.role === role);
+      appState.currentUser = u;
+      switchView('dashboard-layout');
     }
 
-    // Render Stream / Announcements Feed
-    function renderAnnouncementsFeed() {
-      const feed = document.getElementById('announcement-stream');
+    function handleLogout() {
+      appState.currentUser = null;
+      switchView('landing');
+    }
+
+    // Email/Password login simulation
+    function submitLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-password').value.trim();
+
+      if (!email || !pass) {
+        alert('Please fill out all credentials.');
+        return;
+      }
+
+      const found = appState.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (!found) {
+        alert('User not found. Use "arjun@classora.com" or "priya@iitd.ac.in".');
+        return;
+      }
+
+      appState.currentUser = found;
+      switchView('dashboard-layout');
+    }
+
+    // Role state for signup
+    function setSignupRole(role) {
+      appState.signupRole = role;
+      const btnStudent = document.getElementById('btn-signup-role-student');
+      const btnTeacher = document.getElementById('btn-signup-role-teacher');
+
+      if (role === 'student') {
+        btnStudent.className = 'flex-1 text-xs font-bold py-2 rounded-lg bg-violet-600 text-white transition-all';
+        btnTeacher.className = 'flex-1 text-xs font-bold py-2 rounded-lg text-white/50 hover:text-white transition-all';
+      } else {
+        btnStudent.className = 'flex-1 text-xs font-bold py-2 rounded-lg text-white/50 hover:text-white transition-all';
+        btnTeacher.className = 'flex-1 text-xs font-bold py-2 rounded-lg bg-violet-600 text-white transition-all';
+      }
+    }
+
+    // Signup form registration
+    function submitSignup() {
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const pass = document.getElementById('signup-password').value.trim();
+
+      if (!name || !email || !pass) {
+        alert('Please fill all signup information.');
+        return;
+      }
+
+      const id = 'user-' + Date.now();
+      const newUser = { id: id, name: name, email: email, role: appState.signupRole };
+      
+      appState.users.push(newUser);
+      appState.currentUser = newUser;
+      
+      // Auto enroll default student to demo class
+      if (newUser.role === 'student') {
+        appState.classrooms[0].students.push(id);
+      }
+
+      saveState();
+      switchView('dashboard-layout');
+    }
+
+    // Global Search interface
+    function handleGlobalSearch(term) {
+      appState.globalSearch = term.toLowerCase();
+      if (appState.activeTab === 'classrooms' && !appState.activeClassroomId) {
+        loadClassroomsPanel();
+      } else if (appState.activeTab === 'dashboard') {
+        loadDashboardPanel();
+      }
+    }
+
+    // Global Statistics Calculation & Home panel
+    function loadDashboardPanel() {
+      const u = appState.currentUser;
+      const isTeacher = u.role === 'teacher';
+
+      // Greeting Hour
+      const hour = new Date().getHours();
+      const greeting = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+      document.getElementById('greeting-time').innerText = greeting;
+      document.getElementById('greeting-name').innerText = u.name.split(' ')[0];
+
+      // Total classrooms count
+      const activeClasses = appState.classrooms.filter(c => 
+        isTeacher ? c.teacherId === u.id : c.students.includes(u.id)
+      );
+
+      document.getElementById('dashboard-subtitle').innerText = isTeacher
+        ? `You have ${activeClasses.length} active classroom${activeClasses.length !== 1 ? 's' : ''}`
+        : `You are enrolled in ${activeClasses.length} class${activeClasses.length !== 1 ? 'es' : ''}`;
+
+      // Floating header action button
+      const actions = document.getElementById('dashboard-header-actions');
+      if (isTeacher) {
+        actions.innerHTML = `
+          <button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all">
+            <i data-lucide="plus" class="w-4 h-4"></i> New Classroom
+          </button>
+        `;
+      } else {
+        actions.innerHTML = `
+          <button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all">
+            <i data-lucide="plus" class="w-4 h-4"></i> Join Class
+          </button>
+        `;
+      }
+
+      // Collect all assignments in visibility scope
+      let userAssignments = [];
+      activeClasses.forEach(c => {
+        c.assignments.forEach(a => {
+          const sub = appState.submissions.find(s => s.assignmentId === a.id && s.studentId === u.id);
+          userAssignments.push({ ...a, className: c.name, classCode: c.code, submitted: !!sub });
+        });
+      });
+
+      const upcoming = userAssignments.filter(a => new Date(a.dueDate) > new Date());
+      const completed = userAssignments.filter(a => a.submitted || new Date(a.dueDate) <= new Date());
+
+      // Statistics grid columns mapping
+      const stats = isTeacher
+        ? [
+            { label: 'Total Classes', value: activeClasses.length, icon: 'book-open', color: 'text-violet-400', bg: 'bg-violet-500/10' },
+            { label: 'Deployed Assignments', value: userAssignments.length, icon: 'clipboard-list', color: 'text-indigo-400', bg: 'bg-indigo-500/10' },
+            { label: 'Active Students', value: activeClasses.reduce((acc, c) => acc + c.students.length, 0), icon: 'users', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+            { label: 'System Uptime', value: '99.9%', icon: 'trending-up', color: 'text-amber-400', bg: 'bg-amber-500/10' }
+          ]
+        : [
+            { label: 'Joined Classes', value: activeClasses.length, icon: 'book-open', color: 'text-violet-400', bg: 'bg-violet-500/10' },
+            { label: 'Assignments Total', value: userAssignments.length, icon: 'clipboard-list', color: 'text-indigo-400', bg: 'bg-indigo-500/10' },
+            { label: 'Upcoming Tasks', value: upcoming.length, icon: 'clock', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+            { label: 'Completed Tasks', value: userAssignments.filter(a => a.submitted).length, icon: 'check-circle', color: 'text-emerald-400', bg: 'bg-emerald-500/10' }
+          ];
+
+      const statsGrid = document.getElementById('stats-grid');
+      statsGrid.innerHTML = stats.map(s => `
+        <div class="p-5 rounded-2xl bg-white/4 border border-white/6 hover:border-white/10 hover:bg-white/6 transition-all duration-200">
+          <div class="w-9 h-9 rounded-xl ${s.bg} flex items-center justify-center mb-3">
+            <i data-lucide="${s.icon}" class="w-4.5 h-4.5 ${s.color}"></i>
+          </div>
+          <div class="text-2xl font-bold">${s.value}</div>
+          <div class="text-sm text-white/50 mt-0.5">${s.label}</div>
+        </div>
+      `).join('');
+
+      // Populate dashboard classes list
+      const classroomsContainer = document.getElementById('dashboard-classrooms-list');
+      classroomsContainer.innerHTML = '';
+      
+      const filteredClasses = activeClasses.filter(c => c.name.toLowerCase().includes(appState.globalSearch));
+
+      if (filteredClasses.length === 0) {
+        classroomsContainer.innerHTML = `
+          <div class="text-center py-8">
+            <p class="text-sm text-white/40">No classrooms found in search.</p>
+          </div>
+        `;
+      } else {
+        filteredClasses.forEach(c => {
+          const card = document.createElement('div');
+          card.onclick = () => { navigateTo('classrooms'); expandClassroom(c.id); };
+          card.className = 'flex items-center gap-4 p-3.5 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all group cursor-pointer';
+          card.innerHTML = `
+            <div class="w-10 h-10 rounded-xl bg-violet-600/20 text-violet-400 flex items-center justify-center text-sm font-bold flex-shrink-0">
+              ${c.name.charAt(0)}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-sm truncate">${c.name}</p>
+              <p class="text-xs text-white/40">${c.subject} · ${c.section}</p>
+            </div>
+            <div class="text-xs text-white/30">${c.students.length} students</div>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors"></i>
+          `;
+          classroomsContainer.appendChild(card);
+        });
+      }
+
+      // Populate deadlines list
+      const deadlinesContainer = document.getElementById('dashboard-deadlines-list');
+      deadlinesContainer.innerHTML = '';
+
+      const pendingDeadlines = userAssignments.filter(a => !a.submitted).sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+      if (pendingDeadlines.length === 0) {
+        deadlinesContainer.innerHTML = `
+          <div class="text-center py-10 bg-white/2 border border-white/5 rounded-2xl">
+            <i data-lucide="check-circle" class="w-8 h-8 text-emerald-400 mx-auto mb-2"></i>
+            <p class="text-sm text-white/45 font-medium">All caught up! No pending assignments.</p>
+          </div>
+        `;
+      } else {
+        pendingDeadlines.slice(0, 4).forEach(a => {
+          const dl = getDeadlineStatus(a.dueDate);
+          const div = document.createElement('div');
+          div.className = 'p-3.5 rounded-xl bg-white/3 border border-white/5 hover:border-white/10 transition-all cursor-pointer';
+          div.onclick = () => { navigateTo('assignments'); openSubmitGradeModal(a.id, a.classCode); };
+          div.innerHTML = `
+            <div class="flex items-start gap-2.5">
+              <div class="mt-0.5 flex-shrink-0 ${dl.urgent ? 'text-rose-400' : 'text-emerald-400'}">
+                <i data-lucide="${dl.urgent ? 'alert-circle' : 'clock'}" class="w-4 h-4"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium truncate">${a.title}</p>
+                <p class="text-xs text-white/40 mt-0.5 truncate">${a.className}</p>
+                <p class="text-xs mt-1 font-semibold ${dl.urgent ? 'text-rose-400' : 'text-white/50'}">${dl.text}</p>
+              </div>
+            </div>
+          `;
+          deadlinesContainer.appendChild(div);
+        });
+      }
+      lucide.createIcons();
+    }
+
+    // Monthly Calendar renderer
+    function renderMonthlyCalendar() {
+      const grid = document.getElementById('cal-monthly-grid');
+      grid.innerHTML = '';
+
+      const u = appState.currentUser;
+      const baseDate = new Date();
+      baseDate.setMonth(baseDate.getMonth() + appState.calendarMonthOffset);
+
+      const year = baseDate.getFullYear();
+      const month = baseDate.getMonth();
+
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      document.getElementById('cal-heading-title').innerText = `${months[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      // Collect current month user assignments
+      let monthAssignments = [];
+      const userClasses = appState.classrooms.filter(c => 
+        u.role === 'teacher' ? c.teacherId === u.id : c.students.includes(u.id)
+      );
+
+      userClasses.forEach(c => {
+        c.assignments.forEach(a => {
+          const due = new Date(a.dueDate);
+          if (due.getFullYear() === year && due.getMonth() === month) {
+            monthAssignments.push({ ...a, classCode: c.code, day: due.getDate() });
+          }
+        });
+      });
+
+      // Render placeholders
+      for (let i = 0; i < firstDay; i++) {
+        const div = document.createElement('div');
+        div.className = 'bg-white/[0.01] rounded-2xl min-h-[80px]';
+        grid.appendChild(div);
+      }
+
+      // Render days
+      for (let day = 1; day <= totalDays; day++) {
+        const isToday = new Date().getDate() === day && new Date().getMonth() === month && new Date().getFullYear() === year;
+        
+        const cell = document.createElement('div');
+        cell.className = `p-3 rounded-2xl bg-white/5 border border-white/5 min-h-[85px] hover:bg-white/8 transition-all flex flex-col justify-between group ${isToday ? 'border-violet-500 bg-violet-500/10' : ''}`;
+
+        const dayAssigns = monthAssignments.filter(a => a.day === day);
+
+        let eventListHtml = '';
+        if (dayAssigns.length > 0) {
+          eventListHtml = dayAssigns.map(a => `
+            <div class="mt-1 text-[8px] font-extrabold uppercase bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1.5 py-0.5 rounded truncate tracking-wider">
+              ${a.classCode}: ${a.title}
+            </div>
+          `).join('');
+        }
+
+        cell.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold ${isToday ? 'text-violet-400' : 'text-white/60'}">${day}</span>
+            ${isToday ? '<span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>' : ''}
+          </div>
+          <div class="w-full mt-1.5">
+            ${eventListHtml}
+          </div>
+        `;
+        grid.appendChild(cell);
+      }
+    }
+
+    function changeCalMonth(val) {
+      appState.calendarMonthOffset += val;
+      renderMonthlyCalendar();
+    }
+
+    // Classrooms tab rendering controls
+    function loadClassroomsPanel() {
+      const u = appState.currentUser;
+      const isTeacher = u.role === 'teacher';
+
+      // Load action button mapping
+      const btnContainer = document.getElementById('classroom-action-button-container');
+      btnContainer.innerHTML = isTeacher
+        ? `<button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md"><i data-lucide="plus" class="w-4 h-4"></i> Create Classroom</button>`
+        : `<button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md"><i data-lucide="plus" class="w-4 h-4"></i> Join Classroom</button>`;
+
+      const grid = document.getElementById('classrooms-overview-grid');
+      grid.innerHTML = '';
+
+      const activeClasses = appState.classrooms.filter(c => 
+        isTeacher ? c.teacherId === u.id : c.students.includes(u.id)
+      );
+
+      const filtered = activeClasses.filter(c => c.name.toLowerCase().includes(appState.globalSearch));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white/2 border border-white/5 rounded-2xl">
+            <i data-lucide="folder-open" class="w-12 h-12 text-white/30 mx-auto mb-3"></i>
+            <h4 class="font-bold text-lg">No classes found</h4>
+            <p class="text-sm text-white/50 mt-1">${isTeacher ? 'Create a class to get started!' : 'Join a class using a 6-digit code.'}</p>
+          </div>
+        `;
+      } else {
+        filtered.forEach(c => {
+          const card = document.createElement('div');
+          card.onclick = () => expandClassroom(c.id);
+          card.className = 'group p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between h-48';
+          
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono tracking-widest text-violet-400 font-bold bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">${c.code}</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
+              </div>
+              <h4 class="font-extrabold text-lg mt-4 group-hover:text-violet-400 transition-colors leading-tight truncate">${c.name}</h4>
+              <p class="text-xs text-white/50 mt-1 font-medium truncate">${c.subject}</p>
+            </div>
+            <div class="flex items-center justify-between border-t border-white/5 pt-4">
+              <span class="text-xs text-white/40 font-medium">Instructor: ${c.teacherName}</span>
+              <span class="text-xs text-white/40 flex items-center gap-1 font-medium"><i data-lucide="users" class="w-3.5 h-3.5"></i> ${c.students.length}</span>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+      lucide.createIcons();
+    }
+
+    // Classroom details view expand mapping
+    function expandClassroom(classId) {
+      appState.activeClassroomId = classId;
+      document.getElementById('classroom-roster-view').classList.add('hidden');
+      document.getElementById('classroom-expanded-view').classList.remove('hidden');
+
+      const c = appState.classrooms.find(cls => cls.id === classId);
+      document.getElementById('expanded-class-title').innerText = c.name;
+      document.getElementById('expanded-class-subject').innerText = `${c.subject} · ${c.section}`;
+      document.getElementById('expanded-class-code').innerText = c.code;
+
+      // Color backgrounds matching subject names
+      const headerJumbo = document.getElementById('expanded-classroom-cover');
+      headerJumbo.className = `relative rounded-3xl overflow-hidden p-8 sm:p-12 border border-white/10 shadow-xl bg-gradient-to-br from-violet-600 to-indigo-900`;
+
+      // Set sub-tabs
+      setClassroomTab('stream');
+      renderClassroomSidebarDeadlines();
+    }
+
+    function closeClassroomExpand() {
+      appState.activeClassroomId = null;
+      document.getElementById('classroom-roster-view').classList.remove('hidden');
+      document.getElementById('classroom-expanded-view').classList.add('hidden');
+      loadClassroomsPanel();
+    }
+
+    // Subtabs switcher within classroom page
+    function setClassroomTab(subtab) {
+      appState.classroomSubtab = subtab;
+      
+      const tabStream = document.getElementById('subtab-stream');
+      const tabPeople = document.getElementById('subtab-people');
+      const tabAssign = document.getElementById('subtab-assignments');
+
+      const panelStream = document.getElementById('classroom-subtab-stream-panel');
+      const panelPeople = document.getElementById('classroom-subtab-people-panel');
+      const panelAssign = document.getElementById('classroom-subtab-assignments-panel');
+
+      // Styles reset
+      tabStream.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
+      tabPeople.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
+      tabAssign.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
+
+      panelStream.classList.add('hidden');
+      panelPeople.classList.add('hidden');
+      panelAssign.classList.add('hidden');
+
+      if (subtab === 'stream') {
+        tabStream.className = 'text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white';
+        panelStream.classList.remove('hidden');
+        renderClassroomStreamFeed();
+      } else if (subtab === 'people') {
+        tabPeople.className = 'text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white';
+        panelPeople.classList.remove('hidden');
+        renderClassroomPeopleTab();
+      } else {
+        tabAssign.className = 'text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white';
+        panelAssign.classList.remove('hidden');
+        renderClassroomAssignmentsTab();
+      }
+      lucide.createIcons();
+    }
+
+    // Stream list feeds inside expanded classroom
+    function renderClassroomStreamFeed() {
+      const feed = document.getElementById('expanded-announcements-feed');
       feed.innerHTML = '';
 
-      const c = state.classes.find(cls => cls.id === state.activeClassId);
-      if (!c) return;
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
 
       if (c.announcements.length === 0) {
         feed.innerHTML = `
-          <div class="text-center py-8 bg-white/2 border border-white/5 rounded-2xl p-4">
-            <p class="text-sm text-white/40">No announcements posted yet.</p>
+          <div class="text-center py-10 bg-white/2 border border-white/5 rounded-2xl">
+            <p class="text-sm text-white/40">No announcements posted yet in this class stream.</p>
           </div>
         `;
         return;
       }
 
-      // Sort newest first
       const sorted = [...c.announcements].sort((a,b) => new Date(b.date) - new Date(a.date));
 
       sorted.forEach(ann => {
-        const item = document.createElement('div');
-        item.className = 'bg-white/5 border border-white/5 rounded-2xl p-5 backdrop-blur-sm';
-        item.innerHTML = `
-          <div class="flex items-center gap-3 mb-3">
+        const div = document.createElement('div');
+        div.className = 'bg-white/5 border border-white/5 rounded-2xl p-5 backdrop-blur-sm space-y-4';
+
+        let commentsHtml = '';
+        if (ann.comments && ann.comments.length > 0) {
+          commentsHtml = ann.comments.map(comment => `
+            <div class="flex gap-2.5 bg-white/2 border border-white/5 p-3 rounded-xl">
+              <div class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold flex-shrink-0">
+                ${getInitials(comment.author)}
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold">${comment.author}</span>
+                  <span class="text-[9px] text-white/30">${new Date(comment.date).toLocaleDateString()}</span>
+                </div>
+                <p class="text-xs text-white/70 mt-1 leading-relaxed">${comment.text}</p>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl bg-violet-600/20 text-violet-400 flex items-center justify-center font-bold">
-              ${ann.author.charAt(0)}
+              ${ann.authorAvatar}
             </div>
             <div>
               <div class="text-sm font-semibold">${ann.author}</div>
@@ -722,368 +1306,658 @@
             </div>
           </div>
           <p class="text-sm text-white/80 leading-relaxed whitespace-pre-line">${ann.text}</p>
+
+          <!-- Comment input block -->
+          <div class="border-t border-white/5 pt-4 space-y-3">
+            <div class="space-y-2">
+              ${commentsHtml}
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="comment-input-${ann.id}" placeholder="Write a comment..." class="flex-1 bg-[#08081a] border border-white/10 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-violet-500 text-white">
+              <button onclick="postComment('${ann.id}')" class="bg-violet-600 hover:bg-violet-500 text-[10px] font-bold px-3 py-1.5 rounded-lg">Reply</button>
+            </div>
+          </div>
         `;
-        feed.appendChild(item);
+        feed.appendChild(div);
       });
     }
 
-    // Post announcement to classroom
-    function postAnnouncement() {
-      const text = document.getElementById('announcement-text').value.trim();
+    function handlePostAnnouncement() {
+      const text = document.getElementById('expanded-announcement-textarea').value.trim();
       if (!text) return;
 
-      const c = state.classes.find(cls => cls.id === state.activeClassId);
-      if (!c) return;
-
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
       c.announcements.push({
         id: 'ann-' + Date.now(),
-        author: state.role === 'teacher' ? 'Prof. Arjun Mehta' : 'Priya Sharma',
-        authorRole: state.role,
+        author: appState.currentUser.name,
+        authorAvatar: getInitials(appState.currentUser.name),
+        text: text,
+        date: new Date().toISOString(),
+        comments: []
+      });
+
+      document.getElementById('expanded-announcement-textarea').value = '';
+      saveState();
+      renderClassroomStreamFeed();
+    }
+
+    function postComment(annId) {
+      const input = document.getElementById(`comment-input-${annId}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
+      const ann = c.announcements.find(a => a.id === annId);
+
+      if (!ann.comments) ann.comments = [];
+      
+      ann.comments.push({
+        author: appState.currentUser.name,
         text: text,
         date: new Date().toISOString()
       });
 
-      document.getElementById('announcement-text').value = '';
+      input.value = '';
       saveState();
-      renderAnnouncementsFeed();
+      renderClassroomStreamFeed();
     }
 
-    // Render Assignments Sidebar list
-    function renderAssignmentsList() {
-      const list = document.getElementById('class-assignments-list');
-      list.innerHTML = '';
+    // Classroom details People tab list
+    function renderClassroomPeopleTab() {
+      const teachersContainer = document.getElementById('classroom-teachers-list');
+      const classmatesContainer = document.getElementById('classroom-classmates-list');
 
-      const c = state.classes.find(cls => cls.id === state.activeClassId);
-      if (!c) return;
+      teachersContainer.innerHTML = '';
+      classmatesContainer.innerHTML = '';
+
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
+
+      // Render teacher
+      const teacherObj = appState.users.find(u => u.id === c.teacherId) || { name: c.teacherName, email: 'instructor@classora.com' };
+      const teacherDiv = document.createElement('div');
+      teacherDiv.className = 'flex items-center gap-3 p-2 rounded-xl hover:bg-white/5';
+      teacherDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold">${getInitials(teacherObj.name)}</div>
+        <div>
+          <span class="text-sm font-semibold">${teacherObj.name}</span>
+          <span class="text-[10px] text-white/30 block">${teacherObj.email}</span>
+        </div>
+      `;
+      teachersContainer.appendChild(teacherDiv);
+
+      // Render students
+      if (c.students.length === 0) {
+        classmatesContainer.innerHTML = `<p class="text-xs text-white/30 p-2">No students enrolled yet.</p>`;
+      } else {
+        c.students.forEach(stId => {
+          const studentObj = appState.users.find(u => u.id === stId);
+          if (!studentObj) return;
+
+          const stDiv = document.createElement('div');
+          stDiv.className = 'flex items-center gap-3 p-2 rounded-xl hover:bg-white/5';
+          stDiv.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold">${getInitials(studentObj.name)}</div>
+            <div>
+              <span class="text-sm font-semibold">${studentObj.name}</span>
+              <span class="text-[10px] text-white/30 block">${studentObj.email}</span>
+            </div>
+          `;
+          classmatesContainer.appendChild(stDiv);
+        });
+      }
+    }
+
+    // Classroom details Assignments tab list
+    function renderClassroomAssignmentsTab() {
+      const container = document.getElementById('classroom-inner-assignments-list');
+      container.innerHTML = '';
+
+      const isTeacher = appState.currentUser.role === 'teacher';
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
+
+      // Assign action button rendering
+      const createBtn = document.getElementById('btn-create-assignment-in-class');
+      createBtn.innerHTML = isTeacher
+        ? `<button onclick="openCreateAssignmentModal()" class="text-xs bg-violet-600/20 text-violet-300 font-semibold px-3 py-1.5 rounded-lg border border-violet-500/30 hover:bg-violet-500 hover:text-white transition-all">+ Assign Work</button>`
+        : '';
 
       if (c.assignments.length === 0) {
-        list.innerHTML = `
-          <div class="text-center py-6 bg-white/2 border border-white/5 rounded-xl p-3">
-            <p class="text-xs text-white/30">No assignments created.</p>
+        container.innerHTML = `
+          <div class="text-center py-8 bg-white/2 border border-white/5 rounded-2xl p-4">
+            <p class="text-xs text-white/40">No assignments created for this class yet.</p>
           </div>
         `;
         return;
       }
 
-      c.assignments.forEach(assign => {
-        const button = document.createElement('div');
-        button.className = 'p-3 rounded-xl bg-white/5 border border-white/5 hover:border-violet-500/30 hover:bg-white/8 transition-all cursor-pointer flex flex-col justify-between gap-1';
-        button.onclick = () => openSubmitModal(assign.id);
+      c.assignments.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'p-4 rounded-xl bg-white/5 border border-white/5 hover:border-violet-500/30 hover:bg-white/8 transition-all cursor-pointer flex flex-col sm:flex-row justify-between sm:items-center gap-4';
+        div.onclick = () => openSubmitGradeModal(a.id, c.code);
 
-        button.innerHTML = `
-          <div class="flex items-start justify-between gap-2">
-            <h5 class="text-sm font-bold truncate leading-tight">${assign.title}</h5>
-            <span class="text-[9px] uppercase font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20">Due ${assign.dueDate}</span>
+        const dl = getDeadlineStatus(a.dueDate);
+
+        div.innerHTML = `
+          <div class="min-w-0">
+            <h4 class="font-extrabold text-sm truncate">${a.title}</h4>
+            <p class="text-xs text-white/45 truncate mt-1 leading-normal">${a.desc}</p>
           </div>
-          <p class="text-xs text-white/40 truncate mt-1 leading-normal">${assign.desc}</p>
+          <span class="text-[9px] sm:text-xs uppercase font-bold px-2 py-1 rounded border self-start sm:self-center ${dl.urgent ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'text-white/50 bg-white/5 border-white/10'}">${dl.text}</span>
         `;
-        list.appendChild(button);
+        container.appendChild(div);
       });
     }
 
-    // Interactive Monthly Calendar Engine
-    function renderCalendar() {
-      const grid = document.getElementById('calendar-days-grid');
-      grid.innerHTML = '';
+    function renderClassroomSidebarDeadlines() {
+      const container = document.getElementById('classroom-sidebar-assignments');
+      container.innerHTML = '';
 
-      const date = state.currentCalendarDate;
-      const year = date.getFullYear();
-      const month = date.getMonth();
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
+      const pending = c.assignments.filter(a => {
+        const sub = appState.submissions.find(s => s.assignmentId === a.id && s.studentId === appState.currentUser.id);
+        return !sub;
+      });
 
-      // Month name
-      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-      document.getElementById('calendar-title').innerText = `${months[month]} ${year}`;
+      if (pending.length === 0) {
+        container.innerHTML = `<p class="text-xs text-emerald-400 flex items-center gap-1.5 p-1"><i data-lucide="check-circle" class="w-4 h-4"></i> No pending work!</p>`;
+      } else {
+        pending.slice(0, 3).forEach(a => {
+          const dl = getDeadlineStatus(a.dueDate);
+          const div = document.createElement('div');
+          div.className = 'p-3 rounded-xl bg-white/5 hover:bg-white/8 transition-all cursor-pointer';
+          div.onclick = () => openSubmitGradeModal(a.id, c.code);
+          div.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold truncate leading-tight">${a.title}</span>
+              <span class="text-[9px] font-semibold flex-shrink-0 ${dl.urgent ? 'text-rose-400' : 'text-white/45'}">${dl.text.split(' ')[0]}</span>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+      lucide.createIcons();
+    }
 
-      // First day of month & number of days
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
+    // Assignments Central Hub renderer
+    function loadAssignmentsPanel() {
+      const list = document.getElementById('assignments-hub-list');
+      list.innerHTML = '';
 
-      // Collect all assignments across active classes for this month
-      let activeAssignments = [];
-      state.classes.forEach(c => {
-        if (state.role === 'student' && !c.studentsEnrolled.includes('student-1')) return;
+      const u = appState.currentUser;
+      const isTeacher = u.role === 'teacher';
+      const isUpcoming = appState.assignmentsHubTab === 'upcoming';
+
+      // Switch active sub-tabs classes
+      const btnUpcoming = document.getElementById('tab-assign-upcoming');
+      const btnCompleted = document.getElementById('tab-assign-completed');
+
+      btnUpcoming.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
+      btnCompleted.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
+
+      if (isUpcoming) {
+        btnUpcoming.className = 'text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white';
+      } else {
+        btnCompleted.className = 'text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white';
+      }
+
+      // Collect all assignments in scope
+      let assignmentsList = [];
+      const userClasses = appState.classrooms.filter(c => 
+        isTeacher ? c.teacherId === u.id : c.students.includes(u.id)
+      );
+
+      userClasses.forEach(c => {
         c.assignments.forEach(a => {
-          const aDate = new Date(a.dueDate);
-          if (aDate.getFullYear() === year && aDate.getMonth() === month) {
-            activeAssignments.push({
-              ...a,
-              classCode: c.code,
-              day: aDate.getDate()
-            });
+          const sub = appState.submissions.find(s => s.assignmentId === a.id && s.studentId === u.id);
+          assignmentsList.push({ ...a, classCode: c.code, className: c.name, submission: sub });
+        });
+      });
+
+      // Filter list based on selected state
+      let filtered = [];
+      if (isUpcoming) {
+        // Not submitted, and not passed due date
+        filtered = assignmentsList.filter(a => !a.submission);
+      } else {
+        // Submitted or past due
+        filtered = assignmentsList.filter(a => a.submission || new Date(a.dueDate) <= new Date());
+      }
+
+      if (filtered.length === 0) {
+        list.className = 'block';
+        list.innerHTML = `
+          <div class="text-center py-16 bg-white/2 border border-white/5 rounded-3xl">
+            <i data-lucide="check-circle" class="w-12 h-12 text-emerald-400/40 mx-auto mb-3"></i>
+            <h4 class="font-bold text-lg">No assignments found</h4>
+            <p class="text-sm text-white/40 mt-1">${isUpcoming ? 'You are fully caught up!' : 'No completed work history.'}</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      list.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+      filtered.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'p-5 rounded-2xl bg-white/4 border border-white/6 hover:border-white/10 hover:bg-white/6 transition-all duration-200 cursor-pointer flex flex-col justify-between gap-4';
+        div.onclick = () => openSubmitGradeModal(a.id, a.classCode);
+
+        const dl = getDeadlineStatus(a.dueDate);
+        
+        let footerHtml = '';
+        if (a.submission) {
+          footerHtml = `
+            <div class="flex items-center justify-between border-t border-white/5 pt-4">
+              <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4"></i> Submitted</span>
+              <span class="text-xs font-bold text-violet-400">${a.submission.grade !== null ? `Grades: ${a.submission.grade}/100` : 'Pending evaluation'}</span>
+            </div>
+          `;
+        } else {
+          footerHtml = `
+            <div class="flex items-center justify-between border-t border-white/5 pt-4">
+              <span class="text-xs text-rose-400 font-semibold flex items-center gap-1.5"><i data-lucide="alert-circle" class="w-4 h-4"></i> ${dl.text}</span>
+            </div>
+          `;
+        }
+
+        div.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono tracking-widest text-violet-400 font-bold bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">${a.classCode}</span>
+              <span class="text-xs text-white/40 truncate max-w-[150px]">${a.className}</span>
+            </div>
+            <h4 class="font-bold text-base mt-3 group-hover:text-violet-400 transition-colors truncate leading-tight">${a.title}</h4>
+            <p class="text-xs text-white/50 mt-1 truncate leading-normal">${a.desc}</p>
+          </div>
+          ${footerHtml}
+        `;
+        list.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function setAssignmentTab(tab) {
+      appState.assignmentsHubTab = tab;
+      loadAssignmentsPanel();
+    }
+
+    // Students aggregated view (Teacher dashboard tab)
+    function loadStudentsPanel() {
+      const aggregateSubtitle = document.getElementById('students-aggregate-subtitle');
+      const tableRows = document.getElementById('students-aggregated-rows');
+      const cardsGrid = document.getElementById('classroom-aggregated-cards');
+
+      tableRows.innerHTML = '';
+      cardsGrid.innerHTML = '';
+
+      // Collect all student mapping across all classrooms
+      const studentMap = new Map();
+      appState.classrooms.forEach(c => {
+        c.students.forEach(stId => {
+          const studentObj = appState.users.find(u => u.id === stId);
+          if (!studentObj) return;
+
+          const existing = studentMap.get(stId);
+          if (existing) {
+            existing.classes.push(c.name);
+          } else {
+            studentMap.set(stId, { ...studentObj, classes: [c.name] });
           }
         });
       });
 
-      // Render blanks for days of previous month
-      for (let i = 0; i < firstDay; i++) {
-        const blank = document.createElement('div');
-        blank.className = 'bg-white/[0.01] rounded-2xl min-h-[70px] border border-transparent';
-        grid.appendChild(blank);
-      }
+      const aggregatedList = Array.from(studentMap.values()).filter(s => 
+        s.name.toLowerCase().includes(appState.studentsSearch) || 
+        s.email.toLowerCase().includes(appState.studentsSearch)
+      );
 
-      // Render days of the month
-      for (let day = 1; day <= totalDays; day++) {
-        const dayCell = document.createElement('div');
-        
-        // Highlight active today cell
-        const isToday = new Date().getDate() === day && new Date().getMonth() === month && new Date().getFullYear() === year;
-        
-        dayCell.className = `p-3 rounded-2xl bg-white/5 border border-white/5 min-h-[70px] hover:bg-white/8 transition-all flex flex-col justify-between relative group ${isToday ? 'border-violet-500 bg-violet-500/10' : ''}`;
+      aggregateSubtitle.innerText = `${studentMap.size} student${studentMap.size !== 1 ? 's' : ''} across ${appState.classrooms.length} classroom${appState.classrooms.length !== 1 ? 's' : ''}`;
 
-        // Get assignments on this day
-        const dayAssigns = activeAssignments.filter(a => a.day === day);
-
-        let assignBadgeHtml = '';
-        if (dayAssigns.length > 0) {
-          assignBadgeHtml = dayAssigns.map(a => `
-            <div class="mt-1 text-[8px] font-extrabold uppercase bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1.5 py-0.5 rounded truncate tracking-wider" title="${a.title}">
-              ${a.classCode}: ${a.title}
-            </div>
-          `).join('');
-        }
-
-        dayCell.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold ${isToday ? 'text-violet-400' : 'text-white/60'}">${day}</span>
-            ${isToday ? '<span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>' : ''}
-          </div>
-          <div class="w-full mt-1">
-            ${assignBadgeHtml}
+      if (aggregatedList.length === 0) {
+        tableRows.innerHTML = `
+          <div class="text-center py-10 bg-white/2">
+            <p class="text-sm text-white/40">No students match your query.</p>
           </div>
         `;
-        grid.appendChild(dayCell);
+      } else {
+        aggregatedList.forEach(s => {
+          const div = document.createElement('div');
+          div.className = 'grid grid-cols-12 items-center px-5 py-3.5 hover:bg-white/3 transition-all group';
+
+          const classesHtml = s.classes.map(cls => `
+            <span class="text-[10px] bg-violet-500/15 text-violet-400 px-2 py-0.5 rounded-full truncate max-w-[100px]" title="${cls}">${cls}</span>
+          `).join('');
+
+          div.innerHTML = `
+            <div class="col-span-5 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold flex-shrink-0">${getInitials(s.name)}</div>
+              <span class="text-sm font-medium truncate">${s.name}</span>
+            </div>
+            <div class="col-span-4 flex items-center gap-1.5 text-sm text-white/40 truncate">
+              <i data-lucide="mail" class="w-3.5 h-3.5 flex-shrink-0"></i>
+              <span class="truncate">${s.email}</span>
+            </div>
+            <div class="col-span-3 flex flex-wrap gap-1">
+              ${classesHtml}
+            </div>
+          `;
+          tableRows.appendChild(div);
+        });
       }
+
+      // Renders aggregate breakdown cards
+      appState.classrooms.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'p-4 rounded-xl bg-white/4 border border-white/6 flex items-center gap-3';
+        div.innerHTML = `
+          <div class="w-9 h-9 rounded-xl bg-violet-500/15 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="book-open" class="w-4 h-4 text-violet-400"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium truncate">${c.name}</p>
+            <p class="text-xs text-white/40 truncate">${c.subject}</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="text-sm font-semibold">${c.students.length}</div>
+            <div class="text-xs text-white/30">students</div>
+          </div>
+        `;
+        cardsGrid.appendChild(div);
+      });
+      lucide.createIcons();
     }
 
-    function prevMonth() {
-      state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() - 1);
-      renderCalendar();
+    function handleStudentsSearch(term) {
+      appState.studentsSearch = term.toLowerCase();
+      loadStudentsPanel();
     }
 
-    function nextMonth() {
-      state.currentCalendarDate.setMonth(state.currentCalendarDate.getMonth() + 1);
-      renderCalendar();
+    // Profile updates management
+    function loadProfilePanel() {
+      const u = appState.currentUser;
+
+      document.getElementById('profile-editor-avatar').innerText = getInitials(u.name);
+      document.getElementById('profile-editor-badge').innerText = u.name;
+      document.getElementById('profile-editor-role').innerText = u.role;
+
+      document.getElementById('profile-input-name').value = u.name;
+      document.getElementById('profile-input-email').value = u.email;
+      document.getElementById('profile-input-password').value = '';
     }
 
-    // Modal Control: Create / Join Class
-    function openActionModal() {
-      const modal = document.getElementById('modal-classroom');
-      const title = document.getElementById('modal-classroom-title');
-      const fieldsCreate = document.getElementById('fields-create-class');
-      const fieldsJoin = document.getElementById('fields-join-class');
+    function handleUpdateProfile() {
+      const name = document.getElementById('profile-input-name').value.trim();
+      const email = document.getElementById('profile-input-email').value.trim();
+
+      if (!name || !email) {
+        alert('Please fill out all settings fields.');
+        return;
+      }
+
+      appState.currentUser.name = name;
+      appState.currentUser.email = email;
+
+      // Update in base users index
+      const found = appState.users.find(u => u.id === appState.currentUser.id);
+      if (found) {
+        found.name = name;
+        found.email = email;
+      }
+
+      saveState();
+      alert('Profile details updated successfully!');
+      navigateTo('profile');
+    }
+
+    // Classroom Modals: Create / Join classrooms
+    function openClassroomModal() {
+      const modal = document.getElementById('modal-class-action');
+      const title = document.getElementById('class-modal-title');
+      const createForm = document.getElementById('modal-class-create-form');
+      const joinForm = document.getElementById('modal-class-join-form');
 
       modal.classList.remove('hidden');
 
-      if (state.role === 'teacher') {
+      if (appState.currentUser.role === 'teacher') {
         title.innerText = 'Create New Classroom';
-        fieldsCreate.classList.remove('hidden');
-        fieldsJoin.classList.add('hidden');
+        createForm.classList.remove('hidden');
+        joinForm.classList.add('hidden');
       } else {
-        title.innerText = 'Enroll in Classroom';
-        fieldsCreate.classList.add('hidden');
-        fieldsJoin.classList.remove('hidden');
+        title.innerText = 'Join Classroom Room';
+        createForm.classList.add('hidden');
+        joinForm.classList.remove('hidden');
       }
       lucide.createIcons();
     }
 
-    function closeActionModal() {
-      document.getElementById('modal-classroom').classList.add('hidden');
-      document.getElementById('input-class-name').value = '';
-      document.getElementById('input-class-subject').value = '';
-      document.getElementById('input-class-code').value = '';
+    function closeClassroomModal() {
+      document.getElementById('modal-class-action').classList.add('hidden');
+      document.getElementById('class-input-name').value = '';
+      document.getElementById('class-input-subject').value = '';
+      document.getElementById('class-input-section').value = '';
+      document.getElementById('class-input-code').value = '';
     }
 
     function submitClassroomAction() {
-      if (state.role === 'teacher') {
-        const name = document.getElementById('input-class-name').value.trim();
-        const subject = document.getElementById('input-class-subject').value.trim();
-        if (!name || !subject) return;
+      if (appState.currentUser.role === 'teacher') {
+        const name = document.getElementById('class-input-name').value.trim();
+        const subject = document.getElementById('class-input-subject').value.trim();
+        const section = document.getElementById('class-input-section').value.trim();
 
-        // Generate dynamic 6 char unique code
-        const code = Math.random().toString(36).substring(2,8).toUpperCase();
-
-        state.classes.push({
-          id: 'class-' + Date.now(),
-          name: name,
-          subject: subject,
-          code: code,
-          teacherName: 'Prof. Arjun Mehta',
-          teacherId: 'teacher-1',
-          studentsEnrolled: [],
-          announcements: [],
-          assignments: []
-        });
-
-      } else {
-        const code = document.getElementById('input-class-code').value.trim().toUpperCase();
-        if (!code) return;
-
-        const target = state.classes.find(c => c.code === code);
-        if (!target) {
-          alert('Invalid Classroom Code! Try "CS101A" or "MBA504".');
+        if (!name || !subject || !section) {
+          alert('Please enter all classroom options.');
           return;
         }
 
-        // Enroll student if not already there
-        if (!target.studentsEnrolled.includes('student-1')) {
-          target.studentsEnrolled.push('student-1');
+        const code = Math.random().toString(36).substring(2,8).toUpperCase();
+        
+        appState.classrooms.push({
+          id: 'cls-' + Date.now(),
+          name: name,
+          subject: subject,
+          section: section,
+          code: code,
+          teacherName: appState.currentUser.name,
+          teacherId: appState.currentUser.id,
+          students: [],
+          announcements: [],
+          assignments: []
+        });
+      } else {
+        const code = document.getElementById('class-input-code').value.trim().toUpperCase();
+        if (!code) {
+          alert('Please type a 6-digit class code.');
+          return;
+        }
+
+        const target = appState.classrooms.find(c => c.code === code);
+        if (!target) {
+          alert('Invalid Code! Try CN302X or DB403M.');
+          return;
+        }
+
+        // Enroll
+        if (!target.students.includes(appState.currentUser.id)) {
+          target.students.push(appState.currentUser.id);
         }
       }
 
       saveState();
-      closeActionModal();
-      renderDashboard();
+      closeClassroomModal();
+      if (appState.activeTab === 'classrooms') {
+        loadClassroomsPanel();
+      } else {
+        loadDashboardPanel();
+      }
     }
 
-    // Modal Control: Create Assignment
-    function openAssignmentModal() {
-      document.getElementById('modal-assignment').classList.remove('hidden');
+    // Create Assignment Modals
+    function openCreateAssignmentModal() {
+      document.getElementById('modal-create-assign').classList.remove('hidden');
       lucide.createIcons();
     }
 
-    function closeAssignmentModal() {
-      document.getElementById('modal-assignment').classList.add('hidden');
-      document.getElementById('input-assign-title').value = '';
-      document.getElementById('input-assign-desc').value = '';
-      document.getElementById('input-assign-date').value = '';
+    function closeCreateAssignmentModal() {
+      document.getElementById('modal-create-assign').classList.add('hidden');
+      document.getElementById('assign-input-title').value = '';
+      document.getElementById('assign-input-desc').value = '';
+      document.getElementById('assign-input-date').value = '';
     }
 
-    function submitAssignment() {
-      const title = document.getElementById('input-assign-title').value.trim();
-      const desc = document.getElementById('input-assign-desc').value.trim();
-      const dueDate = document.getElementById('input-assign-date').value;
+    function submitCreateAssignment() {
+      const title = document.getElementById('assign-input-title').value.trim();
+      const desc = document.getElementById('assign-input-desc').value.trim();
+      const date = document.getElementById('assign-input-date').value;
 
-      if (!title || !desc || !dueDate) return;
+      if (!title || !desc || !date) {
+        alert('Please fill out all assignment options.');
+        return;
+      }
 
-      const c = state.classes.find(cls => cls.id === state.activeClassId);
-      if (!c) return;
-
+      const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
       c.assignments.push({
         id: 'assign-' + Date.now(),
         title: title,
         desc: desc,
-        dueDate: dueDate
+        dueDate: date
       });
 
       saveState();
-      closeAssignmentModal();
-      renderAssignmentsList();
+      closeCreateAssignmentModal();
+      setClassroomTab('assignments');
     }
 
-    // Modal Control: Submit / View Submissions
-    function openSubmitModal(assignId) {
-      state.activeAssignmentId = assignId;
-      const modal = document.getElementById('modal-submit');
+    // Turn In assignment and evaluate grading modals
+    function openSubmitGradeModal(assignId, classCode) {
+      appState.activeAssignmentId = assignId;
+      
+      const modal = document.getElementById('modal-submit-grade');
       modal.classList.remove('hidden');
 
-      const c = state.classes.find(cls => cls.id === state.activeClassId);
-      const assign = c.assignments.find(a => a.id === assignId);
+      // Find assignment
+      let targetAssign = null;
+      let targetClass = null;
+      appState.classrooms.forEach(c => {
+        const found = c.assignments.find(a => a.id === assignId);
+        if (found) {
+          targetAssign = found;
+          targetClass = c;
+        }
+      });
 
-      document.getElementById('submit-assign-title').innerText = assign.title;
-      document.getElementById('submit-assign-date').innerText = `Due: ${assign.dueDate}`;
-      document.getElementById('submit-assign-desc').innerText = assign.desc;
+      document.getElementById('grade-modal-assign-title').innerText = `${classCode}: ${targetAssign.title}`;
+      
+      const dl = getDeadlineStatus(targetAssign.dueDate);
+      document.getElementById('grade-modal-assign-date').innerText = `Deadline: ${dl.text}`;
+      document.getElementById('grade-modal-assign-desc').innerText = targetAssign.desc;
 
-      const studentPanel = document.getElementById('student-submit-panel');
-      const teacherPanel = document.getElementById('teacher-grade-panel');
+      const studentBlock = document.getElementById('grade-modal-student-block');
+      const teacherBlock = document.getElementById('grade-modal-teacher-block');
 
-      if (state.role === 'student') {
-        studentPanel.classList.remove('hidden');
-        teacherPanel.classList.add('hidden');
+      if (appState.currentUser.role === 'student') {
+        studentBlock.classList.remove('hidden');
+        teacherBlock.classList.add('hidden');
 
-        // Check if student already submitted
-        const sub = state.submissions.find(s => s.assignmentId === assignId && s.studentId === 'student-1');
-        const inputUrl = document.getElementById('input-submit-url');
+        // Check submission status
+        const sub = appState.submissions.find(s => s.assignmentId === assignId && s.studentId === appState.currentUser.id);
+        const inputUrl = document.getElementById('grade-modal-submit-url');
+        const btn = document.getElementById('grade-modal-submit-btn');
+
         if (sub) {
           inputUrl.value = sub.submitUrl;
           inputUrl.disabled = true;
-          studentPanel.querySelector('button').innerText = 'Turned In Successfully';
-          studentPanel.querySelector('button').disabled = true;
-          studentPanel.querySelector('button').className = 'w-full bg-emerald-600/30 text-emerald-300 font-semibold p-3 rounded-xl border border-emerald-500/20';
+          btn.innerText = sub.grade !== null ? `Graded: ${sub.grade}/100` : 'Turned In Successfully';
+          btn.disabled = true;
+          btn.className = 'w-full bg-emerald-600/30 text-emerald-300 font-semibold p-3 rounded-xl border border-emerald-500/20';
         } else {
           inputUrl.value = '';
           inputUrl.disabled = false;
-          studentPanel.querySelector('button').innerText = 'Turn In Assignment';
-          studentPanel.querySelector('button').disabled = false;
-          studentPanel.querySelector('button').className = 'w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold p-3 rounded-xl transition-all';
+          btn.innerText = 'Turn In Assignment';
+          btn.disabled = false;
+          btn.className = 'w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold p-3 rounded-xl transition-all';
         }
       } else {
-        studentPanel.classList.add('hidden');
-        teacherPanel.classList.remove('hidden');
-        renderSubmissionsList(assignId);
+        studentBlock.classList.add('hidden');
+        teacherBlock.classList.remove('hidden');
+        renderTeacherGradeSubmissions(assignId);
       }
       lucide.createIcons();
     }
 
-    function closeSubmitModal() {
-      document.getElementById('modal-submit').classList.add('hidden');
-      state.activeAssignmentId = null;
+    function closeSubmitGradeModal() {
+      document.getElementById('modal-submit-grade').classList.add('hidden');
+      appState.activeAssignmentId = null;
+      if (appState.activeTab === 'assignments') {
+        loadAssignmentsPanel();
+      } else if (appState.activeTab === 'classrooms' && appState.activeClassroomId) {
+        renderClassroomAssignmentsTab();
+      }
     }
 
-    // Student Submits Work
-    function submitAssignmentWork() {
-      const url = document.getElementById('input-submit-url').value.trim();
-      if (!url) return;
-
-      state.submissions.push({
-        id: 'sub-' + Date.now(),
-        assignmentId: state.activeAssignmentId,
-        classId: state.activeClassId,
-        studentName: 'Priya Sharma',
-        studentId: 'student-1',
-        submitUrl: url,
-        submittedAt: new Date().toISOString(),
-        grade: null,
-        feedback: ''
-      });
-
-      saveState();
-      closeSubmitModal();
-    }
-
-    // Teacher grades submissions list
-    function renderSubmissionsList(assignId) {
-      const list = document.getElementById('submissions-list');
-      list.innerHTML = '';
-
-      const subs = state.submissions.filter(s => s.assignmentId === assignId);
-
-      if (subs.length === 0) {
-        list.innerHTML = `<p class="text-xs text-white/30 text-center py-4">No submissions received yet.</p>`;
+    function submitAssignmentLink() {
+      const url = document.getElementById('grade-modal-submit-url').value.trim();
+      if (!url) {
+        alert('Please specify a repository or cloud document link.');
         return;
       }
 
-      subs.forEach(s => {
-        const item = document.createElement('div');
-        item.className = 'p-3 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-2';
+      appState.submissions.push({
+        id: 'sub-' + Date.now(),
+        assignmentId: appState.activeAssignmentId,
+        studentId: appState.currentUser.id,
+        studentName: appState.currentUser.name,
+        submitUrl: url,
+        submittedAt: new Date().toISOString(),
+        grade: null
+      });
+
+      saveState();
+      closeSubmitGradeModal();
+    }
+
+    function renderTeacherGradeSubmissions(assignId) {
+      const feed = document.getElementById('grade-modal-submissions-feed');
+      feed.innerHTML = '';
+
+      const list = appState.submissions.filter(s => s.assignmentId === assignId);
+
+      if (list.length === 0) {
+        feed.innerHTML = `<p class="text-xs text-white/30 text-center py-4">No submissions received from student classmates yet.</p>`;
+        return;
+      }
+
+      list.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'p-3 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-2';
         
-        item.innerHTML = `
+        div.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold">${s.studentName}</span>
             <span class="text-[10px] text-white/40">${new Date(s.submittedAt).toLocaleDateString()}</span>
           </div>
           <a href="${s.submitUrl}" target="_blank" class="text-xs text-violet-400 hover:underline flex items-center gap-1 font-mono truncate"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> ${s.submitUrl}</a>
           <div class="flex items-center gap-2 mt-1">
-            <input type="number" placeholder="Grade" value="${s.grade !== null ? s.grade : ''}" onchange="gradeSubmission('${s.id}', this.value)" class="w-20 bg-black/40 border border-white/10 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-violet-500">
-            <span class="text-xs text-white/40">/ 100</span>
+            <input type="number" placeholder="Enter Grade" value="${s.grade !== null ? s.grade : ''}" onchange="submitStudentGrade('${s.id}', this.value)" class="w-24 bg-black/40 border border-white/10 rounded px-2.5 py-1 text-xs text-white focus:outline-none focus:border-violet-500">
+            <span class="text-xs text-white/40">/ 100 max</span>
           </div>
         `;
-        list.appendChild(item);
+        feed.appendChild(div);
       });
       lucide.createIcons();
     }
 
-    function gradeSubmission(subId, val) {
-      const sub = state.submissions.find(s => s.id === subId);
+    function submitStudentGrade(subId, val) {
+      const sub = appState.submissions.find(s => s.id === subId);
       if (sub) {
         sub.grade = val ? parseInt(val) : null;
         saveState();
       }
     }
 
-    // Init App
+    // Init Core
     window.onload = () => {
-      loadInitialSeedData();
-      switchView('landing');
+      loadState();
+      switchView(appState.currentUser ? 'dashboard-layout' : 'landing');
     };
   </script>
 </body>
