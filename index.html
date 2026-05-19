@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classora - Modern LMS Prototype</title>
+  <title>Classora - Learn without limits. Teach without friction.</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -15,7 +15,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #04040f;
     }
-    /* Ambient glows */
+    /* Ambient glows matching live production site */
     .glow-purple {
       filter: blur(140px);
       background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
@@ -24,25 +24,23 @@
       filter: blur(140px);
       background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
     }
-    /* Dynamic transitions */
+    /* Dynamic fade-in transitions */
     .fade-in {
       animation: fadeIn 0.25s ease-out forwards;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body class="text-white min-h-screen relative overflow-x-hidden">
 
-  <!-- Glow effects behind layout -->
-  <div class="absolute top-0 left-1/4 w-[600px] h-[600px] glow-purple pointer-events-none z-0"></div>
-  <div class="absolute bottom-10 right-1/4 w-[500px] h-[500px] glow-indigo pointer-events-none z-0"></div>
+  <!-- Ambient Glow Background Graphics -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] glow-purple pointer-events-none z-0"></div>
+  <div class="fixed bottom-0 right-10 w-[500px] h-[500px] glow-indigo pointer-events-none z-0"></div>
 
-  <!-- ==================== FRONTEND CONTROLLER LAYER ==================== -->
-
-  <!-- PUBLIC SITE WRAPPER (Landing, Login, Signup) -->
+  <!-- ==================== PUBLIC SITE VIEWPORT (Landing, Login, Signup) ==================== -->
   <div id="wrapper-public" class="relative z-10 min-h-screen flex flex-col justify-between">
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#04040f]/80 backdrop-blur-xl">
@@ -50,9 +48,9 @@
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('landing')">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
-              <i data-lucide="graduation-cap" class="w-4.5 h-4.5 text-white"></i>
+              <i data-lucide="graduation-cap" class="w-4 h-4 text-white"></i>
             </div>
-            <span class="text-xl font-bold tracking-tight">Classora</span>
+            <span class="text-xl font-bold tracking-tight text-white">Classora</span>
           </div>
 
           <div class="hidden md:flex items-center gap-8">
@@ -63,23 +61,32 @@
 
           <div class="flex items-center gap-3">
             <button onclick="switchView('login')" class="text-sm font-medium text-white/70 hover:text-white transition-colors px-3 py-1.5">Sign in</button>
-            <button onclick="switchView('signup')" class="text-sm font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white px-4 py-2 rounded-lg transition-all duration-200">Get Started</button>
+            <button onclick="switchView('signup')" class="text-sm font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25">Get Started</button>
           </div>
         </div>
       </div>
     </nav>
 
-    <!-- Page: Landing -->
+    <!-- Page Content: Landing -->
     <main id="page-landing" class="pt-32 pb-24 px-4 sm:px-6 lg:px-8 flex-1">
-      <div class="max-w-5xl mx-auto text-center">
+      <!-- Hero -->
+      <section class="relative max-w-5xl mx-auto text-center mb-24">
+        <!-- Hero Badge -->
         <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-sm text-white/70 mb-8">
           <i data-lucide="zap" class="w-3.5 h-3.5 text-violet-400"></i>
           Modern classroom for the next generation
         </div>
 
         <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
-          Learn without <span class="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">limits.</span><br>
-          Teach without <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">friction.</span>
+          Learn without{' '}
+          <span class="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+            limits.
+          </span>
+          <br />
+          Teach without{' '}
+          <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            friction.
+          </span>
         </h1>
 
         <p class="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -96,88 +103,318 @@
           </button>
         </div>
 
-        <!-- Trust tags -->
-        <div class="flex items-center justify-center gap-6 mt-12 flex-wrap text-sm text-white/50">
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> No card required</div>
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Local simulator</div>
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Dynamic calendar</div>
+        <!-- Trust indicators -->
+        <div class="flex items-center justify-center gap-6 mt-12 flex-wrap">
+          <div class="flex items-center gap-1.5 text-sm text-white/50">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
+            No credit card
+          </div>
+          <div class="flex items-center gap-1.5 text-sm text-white/50">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
+            Free forever plan
+          </div>
+          <div class="flex items-center gap-1.5 text-sm text-white/50">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
+            Setup in 2 minutes
+          </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section id="stats" class="py-16 border-y border-white/5 max-w-7xl mx-auto mb-24">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">50K+</div>
+            <div class="text-sm text-white/50 mt-1">Students</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">3K+</div>
+            <div class="text-sm text-white/50 mt-1">Educators</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">200K+</div>
+            <div class="text-sm text-white/50 mt-1">Assignments</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">99.9%</div>
+            <div class="text-sm text-white/50 mt-1">Uptime</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section id="features" class="py-16 max-w-7xl mx-auto mb-24">
+        <div class="text-center mb-16">
+          <div class="inline-block text-xs font-semibold uppercase tracking-widest text-violet-400 bg-violet-500/10 px-3 py-1 rounded-full mb-4">
+            Features
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">Everything you need to run a great classroom</h2>
+          <p class="text-white/50 max-w-xl mx-auto">Built for modern education — fast, intuitive, and packed with features that actually matter.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group p-6 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center mb-4 text-violet-500">
+              <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Smart Classrooms</h3>
+            <p class="text-sm text-white/50 leading-relaxed">Create and manage virtual classrooms with a unique join code system. Stream announcements, share resources, and keep everything organized.</p>
+          </div>
+
+          <div class="group p-6 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4 text-indigo-500">
+              <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Assignment Management</h3>
+            <p class="text-sm text-white/50 leading-relaxed">Post assignments with deadlines, attach files, and track submissions in real-time. Students get notified instantly.</p>
+          </div>
+
+          <div class="group p-6 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4 text-emerald-500">
+              <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Grade & Analytics</h3>
+            <p class="text-sm text-white/50 leading-relaxed">Review submissions, assign grades, and add personalized feedback. Students can track their progress over time.</p>
+          </div>
+
+          <div class="group p-6 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4 text-amber-500">
+              <i data-lucide="zap" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Real-time Updates</h3>
+            <p class="text-sm text-white/50 leading-relaxed">Get instant notifications for new assignments, grades, and announcements. Stay in the loop without refreshing.</p>
+          </div>
+
+          <div class="group p-6 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4 text-rose-500">
+              <i data-lucide="shield" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">Secure by Design</h3>
+            <p class="text-sm text-white/50 leading-relaxed">JWT authentication, role-based access, and encrypted passwords keep your data safe at all times.</p>
+          </div>
+
+          <div class="group p-6 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4 text-cyan-500">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-semibold text-white mb-2">People Management</h3>
+            <p class="text-sm text-white/50 leading-relaxed">Manage students in each classroom, view profiles, and keep track of who joined and when.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section id="testimonials" class="py-16 max-w-7xl mx-auto mb-24 p-8 rounded-3xl bg-white/2 border border-white/5">
+        <div class="text-center mb-16">
+          <div class="inline-block text-xs font-semibold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full mb-4">
+            Testimonials
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold">Loved by students & teachers</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl border border-white/5 bg-[#08081a]">
+            <div class="flex mb-3">
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            </div>
+            <p class="text-white/70 text-sm leading-relaxed mb-5">"Classora completely replaced our need for email chains. Assignments are clear, deadlines are visible, and grades come back fast."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold">PS</div>
+              <div>
+                <div class="text-sm font-medium">Priya Sharma</div>
+                <div class="text-xs text-white/40">Computer Science Student · IIT Delhi</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl border border-white/5 bg-[#08081a]">
+            <div class="flex mb-3">
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            </div>
+            <p class="text-white/70 text-sm leading-relaxed mb-5">"I've tried many tools. Classora is the cleanest and most intuitive. My students adapted in minutes, not days."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold">AM</div>
+              <div>
+                <div class="text-sm font-medium">Prof. Arjun Mehta</div>
+                <div class="text-xs text-white/40">Associate Professor · BITS Pilani</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl border border-white/5 bg-[#08081a]">
+            <div class="flex mb-3">
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+              <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            </div>
+            <p class="text-white/70 text-sm leading-relaxed mb-5">"The progress tracking feature keeps me accountable. I always know exactly where I stand in every course."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold">ZK</div>
+              <div>
+                <div class="text-sm font-medium">Zara Khan</div>
+                <div class="text-xs text-white/40">MBA Student · IIM Bangalore</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Banner Section -->
+      <section class="max-w-4xl mx-auto text-center mb-12">
+        <div class="relative p-10 sm:p-16 rounded-3xl border border-white/10 bg-gradient-to-br from-violet-600/20 to-indigo-600/10 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-transparent"></div>
+          <div class="relative">
+            <h2 class="text-3xl sm:text-5xl font-bold mb-4">Ready to transform your classroom?</h2>
+            <p class="text-white/60 mb-8 text-lg">Join thousands of students and teachers already using Classora.</p>
+            <button onclick="switchView('signup')" class="inline-flex items-center gap-2 bg-white text-[#04040f] font-bold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
+              Get started for free
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Page: Login -->
-    <main id="page-login" class="hidden pt-32 pb-24 px-4 flex-1 flex items-center justify-center">
-      <div class="bg-[#08081a] border border-white/5 rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-24 h-24 bg-violet-600/20 rounded-full blur-2xl"></div>
+    <!-- Page Content: Login Form Card -->
+    <main id="page-login" class="hidden pt-32 pb-24 px-4 flex-1 flex flex-col items-center justify-center relative">
+      <div class="w-full max-w-md">
+        <!-- Logo -->
         <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold">Welcome back</h2>
-          <p class="text-sm text-white/50 mt-1">Select a mock account or use sandbox credentials</p>
+          <div onclick="switchView('landing')" class="inline-flex items-center gap-2 mb-6 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+              <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+            </div>
+            <span class="text-2xl font-bold text-white">Classora</span>
+          </div>
+          <h1 class="text-2xl font-bold text-white mb-1">Welcome back</h1>
+          <p class="text-white/50 text-sm">Sign in to continue learning</p>
         </div>
 
-        <div class="space-y-4">
-          <div class="bg-white/5 border border-white/5 p-4 rounded-2xl">
-            <h3 class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Sandbox Speed-Login</h3>
+        <!-- Glass card -->
+        <div class="bg-white/4 border border-white/8 rounded-2xl p-8 backdrop-blur-sm shadow-xl relative overflow-hidden">
+          <!-- Sandbox Accounts Speed-Access banner -->
+          <div class="bg-violet-600/10 border border-violet-500/20 p-4 rounded-xl mb-6">
+            <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-2">Local Sandbox Sandbox Sign-In</span>
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="loginAs('teacher')" class="bg-violet-600 hover:bg-violet-500 text-xs text-white font-bold p-2.5 rounded-xl transition-all">Teacher Sandbox</button>
-              <button onclick="loginAs('student')" class="bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-bold p-2.5 rounded-xl transition-all">Student Sandbox</button>
+              <button onclick="loginAs('teacher')" class="bg-violet-600 hover:bg-violet-500 text-xs font-bold py-2 px-3 rounded-lg transition-all">Teacher Account</button>
+              <button onclick="loginAs('student')" class="bg-indigo-600 hover:bg-indigo-500 text-xs font-bold py-2 px-3 rounded-lg transition-all">Student Account</button>
             </div>
           </div>
 
-          <div class="space-y-3">
+          <div class="space-y-5">
+            <!-- Email -->
             <div>
-              <label class="block text-xs font-semibold text-white/60 mb-1.5">Email Address</label>
-              <input type="email" id="login-email" placeholder="e.g. arjun@classora.com" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+              <label class="block text-sm font-medium text-white/70 mb-2">Email address</label>
+              <div class="relative">
+                <i data-lucide="mail" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
+                <input type="email" id="login-email" placeholder="you@example.com" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+              </div>
             </div>
+
+            <!-- Password -->
             <div>
-              <label class="block text-xs font-semibold text-white/60 mb-1.5">Password</label>
-              <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-medium text-white/70">Password</label>
+                <button type="button" class="text-xs text-violet-400 hover:text-violet-300 transition-colors">Forgot password?</button>
+              </div>
+              <div class="relative">
+                <i data-lucide="lock" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
+                <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+                <button type="button" onclick="togglePasswordVisibility('login-password', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
             </div>
+
+            <button onclick="submitLogin()" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 mt-2">
+              Sign in <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
           </div>
 
-          <button onclick="submitLogin()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3.5 rounded-xl transition-all shadow-lg shadow-violet-500/10 mt-2">
-            Sign In
-          </button>
-
-          <p class="text-center text-xs text-white/40 mt-4">Don't have an account? <span onclick="switchView('signup')" class="text-violet-400 hover:underline cursor-pointer">Sign up here</span></p>
+          <p class="text-center text-sm text-white/40 mt-6">
+            Don't have an account? 
+            <span onclick="switchView('signup')" class="text-violet-400 hover:text-violet-300 font-medium transition-colors cursor-pointer">Create one</span>
+          </p>
         </div>
       </div>
     </main>
 
-    <!-- Page: Signup -->
-    <main id="page-signup" class="hidden pt-32 pb-24 px-4 flex-1 flex items-center justify-center">
-      <div class="bg-[#08081a] border border-white/5 rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-24 h-24 bg-violet-600/20 rounded-full blur-2xl"></div>
-        <div class="text-center mb-6">
-          <h2 class="text-2xl font-bold">Create your account</h2>
-          <p class="text-sm text-white/50 mt-1">Start learning or teaching today</p>
+    <!-- Page Content: Signup Form Card -->
+    <main id="page-signup" class="hidden pt-32 pb-24 px-4 flex-1 flex flex-col items-center justify-center relative">
+      <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+          <div onclick="switchView('landing')" class="inline-flex items-center gap-2 mb-6 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+              <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+            </div>
+            <span class="text-2xl font-bold text-white">Classora</span>
+          </div>
+          <h1 class="text-2xl font-bold text-white mb-1">Create your account</h1>
+          <p class="text-white/50 text-sm">Join thousands of students and educators</p>
         </div>
 
-        <div class="space-y-4">
-          <div class="flex gap-2 p-1 bg-white/5 border border-white/10 rounded-xl">
-            <button id="btn-signup-role-student" onclick="setSignupRole('student')" class="flex-1 text-xs font-bold py-2 rounded-lg bg-violet-600 text-white transition-all">Student</button>
-            <button id="btn-signup-role-teacher" onclick="setSignupRole('teacher')" class="flex-1 text-xs font-bold py-2 rounded-lg text-white/50 hover:text-white transition-all">Teacher</button>
+        <!-- Glass card -->
+        <div class="bg-white/4 border border-white/8 rounded-2xl p-8 backdrop-blur-sm shadow-xl relative overflow-hidden">
+          <div class="space-y-5">
+            <!-- Role Toggle Switcher -->
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-2">I am a...</label>
+              <div class="grid grid-cols-2 gap-2 p-1 bg-white/5 rounded-xl">
+                <button id="signup-role-student" onclick="setSignupRole('student')" class="text-center py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg">Student</button>
+                <button id="signup-role-teacher" onclick="setSignupRole('teacher')" class="text-center py-2 rounded-lg text-sm font-medium transition-all duration-200 text-white/50 hover:text-white/70">Teacher</button>
+              </div>
+            </div>
+
+            <!-- Full Name -->
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-2">Full name</label>
+              <div class="relative">
+                <i data-lucide="user" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
+                <input type="text" id="signup-name" placeholder="John Doe" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-2">Email address</label>
+              <div class="relative">
+                <i data-lucide="mail" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
+                <input type="email" id="signup-email" placeholder="you@example.com" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-2">Password</label>
+              <div class="relative">
+                <i data-lucide="lock" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
+                <input type="password" id="signup-password" placeholder="Min. 8 chars, 1 uppercase, 1 number" class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+                <button type="button" onclick="togglePasswordVisibility('signup-password', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <button onclick="submitSignup()" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold py-3 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 mt-2">
+              Create account <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
           </div>
 
-          <div class="space-y-3">
-            <div>
-              <label class="block text-xs font-semibold text-white/60 mb-1.5">Full Name</label>
-              <input type="text" id="signup-name" placeholder="e.g. Priya Sharma" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-white/60 mb-1.5">Email Address</label>
-              <input type="email" id="signup-email" placeholder="e.g. priya@iitd.ac.in" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-white/60 mb-1.5">Password</label>
-              <input type="password" id="signup-password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500 transition-all">
-            </div>
-          </div>
-
-          <button onclick="submitSignup()" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold p-3.5 rounded-xl transition-all shadow-lg shadow-violet-500/10 mt-2">
-            Create Sandbox Account
-          </button>
-
-          <p class="text-center text-xs text-white/40 mt-4">Already registered? <span onclick="switchView('login')" class="text-violet-400 hover:underline cursor-pointer">Sign in here</span></p>
+          <p class="text-center text-sm text-white/40 mt-6">
+            Already have an account? 
+            <span onclick="switchView('login')" class="text-violet-400 hover:text-violet-300 font-medium transition-colors cursor-pointer">Sign in</span>
+          </p>
         </div>
       </div>
     </main>
@@ -189,55 +426,57 @@
           <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
             <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-white"></i>
           </div>
-          <span class="font-semibold">Classora</span>
+          <span class="font-semibold text-white">Classora</span>
         </div>
-        <p class="text-sm text-white/30">© 2026 Classora. Dedicated to advanced local pair programming showcase.</p>
+        <p class="text-sm text-white/30">© 2026 Classora. Built for learners, by learners.</p>
+        <div class="flex gap-6">
+          <span onclick="switchView('login')" class="text-sm text-white/40 hover:text-white/70 transition-colors cursor-pointer">Sign in</span>
+          <span onclick="switchView('signup')" class="text-sm text-white/40 hover:text-white/70 transition-colors cursor-pointer">Sign up</span>
+        </div>
       </div>
     </footer>
   </div>
 
-  <!-- AUTHENTICATED SYSTEM WRAPPER (Side navigation + Routing Panels) -->
-  <div id="wrapper-auth" class="hidden min-h-screen bg-[#060614] text-white flex">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-[#08081a] border-r border-white/5 flex flex-col flex-shrink-0">
-      <!-- Logo -->
-      <div class="flex items-center gap-2.5 px-5 h-16 border-b border-white/5">
+  <!-- ==================== AUTHENTICATED SYSTEM WRAPPER (Sidebar & Dashboard Panel routes) ==================== -->
+  <div id="wrapper-auth" class="hidden min-h-screen bg-[#060614] text-white flex z-10 relative">
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-[#08081a] border-r border-white/5 flex flex-col flex-shrink-0 z-20">
+      <!-- Sidebar Logo Header -->
+      <div class="flex items-center gap-2.5 px-5 h-16 border-b border-white/5 cursor-pointer" onclick="navigateTo('dashboard')">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center flex-shrink-0">
           <i data-lucide="graduation-cap" class="w-4 h-4 text-white"></i>
         </div>
-        <span class="text-lg font-bold tracking-tight">Classora</span>
+        <span class="text-lg font-bold tracking-tight text-white">Classora</span>
       </div>
 
-      <!-- Current Logged In User Pill -->
+      <!-- Logged In User profile pill -->
       <div class="mx-3 mt-4 p-3 rounded-xl bg-white/4 border border-white/5">
         <div class="flex items-center gap-3">
-          <div id="sidebar-user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
-            PS
-          </div>
+          <div id="sidebar-user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0"></div>
           <div class="min-w-0 flex-1">
-            <p id="sidebar-user-name" class="text-sm font-medium truncate"></p>
+            <p id="sidebar-user-name" class="text-sm font-medium truncate text-white"></p>
             <p id="sidebar-user-role" class="text-xs text-white/40 capitalize"></p>
           </div>
         </div>
       </div>
 
-      <!-- Dynamic Sidebar Navigation -->
+      <!-- Navigation Paths Switchers -->
       <nav id="sidebar-navigation" class="flex-1 px-3 py-6 space-y-1">
-        <!-- Renders based on role -->
+        <!-- Rendered dynamically depending on user role -->
       </nav>
 
-      <!-- Logout button -->
+      <!-- Logout -->
       <div class="px-3 pb-4">
-        <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/40 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-150">
+        <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/40 hover:text-rose-400 hover:bg-rose-500/10 transition-all">
           <i data-lucide="log-out" class="w-4 h-4"></i>
           Sign out
         </button>
       </div>
     </aside>
 
-    <!-- Main Content Panel -->
+    <!-- Main Workspace Viewport -->
     <div class="flex-1 flex flex-col min-w-0">
-      <!-- Sticky Topbar Header -->
+      <!-- Header bar -->
       <header class="sticky top-0 z-30 h-16 border-b border-white/5 bg-[#060614]/90 backdrop-blur-xl flex items-center gap-3 px-6">
         <!-- Search bar -->
         <div class="flex items-center gap-2 flex-1 max-w-xs bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white/40">
@@ -245,25 +484,24 @@
           <input type="text" id="global-search-input" placeholder="Search classrooms..." oninput="handleGlobalSearch(this.value)" class="bg-transparent border-none outline-none text-white text-xs placeholder:text-white/30 w-full">
         </div>
 
-        <!-- Notification center and avatar -->
         <div class="ml-auto flex items-center gap-3">
+          <!-- Notification Center -->
           <button class="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/5 text-white/50 hover:text-white transition-colors">
             <i data-lucide="bell" class="w-5 h-5"></i>
             <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full"></span>
           </button>
 
-          <div id="topbar-user-avatar" class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-sm font-bold">
-            PS
-          </div>
+          <!-- Topbar Avatar -->
+          <div id="topbar-user-avatar" class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-sm font-bold text-white"></div>
         </div>
       </header>
 
-      <!-- Routing Container -->
+      <!-- Routing container panel views -->
       <main class="flex-1 p-8 overflow-y-auto z-10 relative">
 
-        <!-- ==================== TAB: DASHBOARD HOME ==================== -->
+        <!-- ==================== PANEL: DASHBOARD HOME ==================== -->
         <div id="panel-dashboard" class="route-panel fade-in space-y-8 hidden">
-          <!-- Header Greeting -->
+          <!-- Welcome and Greetings header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 class="text-2xl font-bold flex items-center gap-2">
@@ -271,19 +509,15 @@
               </h1>
               <p id="dashboard-subtitle" class="text-white/50 text-sm mt-1"></p>
             </div>
-            <div id="dashboard-header-actions">
-              <!-- Render dynamic action buttons depending on teacher vs student -->
-            </div>
+            <div id="dashboard-header-actions"></div>
           </div>
 
-          <!-- Dynamic Statistics Grid -->
-          <div id="stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Dynamic stats card generated dynamically -->
-          </div>
+          <!-- Dynamic Statistics Card Roster -->
+          <div id="stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
 
-          <!-- Two-column dashboards overview -->
+          <!-- Classes & Deadlines split panels -->
           <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            <!-- Classroom list -->
+            <!-- Active Classrooms -->
             <div class="lg:col-span-3 bg-white/4 border border-white/6 rounded-2xl p-6">
               <div class="flex items-center justify-between mb-5">
                 <h2 class="font-semibold text-white/80">Your Classrooms</h2>
@@ -291,12 +525,10 @@
                   View all <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
-              <div id="dashboard-classrooms-list" class="space-y-3">
-                <!-- Lists active class cards -->
-              </div>
+              <div id="dashboard-classrooms-list" class="space-y-3"></div>
             </div>
 
-            <!-- Upcoming/Alert panels -->
+            <!-- Deadlines notifications alert card -->
             <div class="lg:col-span-2 bg-white/4 border border-white/6 rounded-2xl p-6">
               <div class="flex items-center justify-between mb-5">
                 <h2 class="font-semibold text-white/80">Upcoming Deadlines</h2>
@@ -304,17 +536,15 @@
                   View all <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
-              <div id="dashboard-deadlines-list" class="space-y-3">
-                <!-- Dynamic cards with Urgent Alert colors -->
-              </div>
+              <div id="dashboard-deadlines-list" class="space-y-3"></div>
             </div>
           </div>
         </div>
 
-        <!-- ==================== TAB: CALENDAR ==================== -->
+        <!-- ==================== PANEL: CALENDAR GRID ==================== -->
         <div id="panel-calendar" class="route-panel fade-in space-y-6 hidden">
           <div class="bg-white/4 border border-white/6 rounded-3xl p-6">
-            <!-- Calendar Header controls -->
+            <!-- Calendar Controls -->
             <div class="flex items-center justify-between mb-6">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400">
@@ -335,14 +565,14 @@
             <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold text-white/40 tracking-wider">
               <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
             </div>
-            <!-- Month dynamic grid -->
+            <!-- Dynamic days grid -->
             <div id="cal-monthly-grid" class="grid grid-cols-7 gap-2 min-h-[350px]"></div>
           </div>
         </div>
 
-        <!-- ==================== TAB: CLASSROOMS OVERVIEW ==================== -->
+        <!-- ==================== PANEL: CLASSROOMS & ROOM VIEW ==================== -->
         <div id="panel-classrooms" class="route-panel fade-in space-y-8 hidden">
-          <!-- Classrooms Roster -->
+          <!-- Classrooms list gallery -->
           <div id="classroom-roster-view" class="space-y-6">
             <div class="flex items-center justify-between">
               <div>
@@ -354,18 +584,18 @@
             <div id="classrooms-overview-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
           </div>
 
-          <!-- Classroom Expanded Detail Room -->
+          <!-- Classroom Room Expanded Subpage -->
           <div id="classroom-expanded-view" class="hidden space-y-6">
             <button onclick="closeClassroomExpand()" class="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors bg-white/5 px-3 py-1.5 rounded-xl border border-white/5">
               <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Classrooms
             </button>
 
-            <!-- Jumbo Header Cover -->
+            <!-- Expanded Classroom Jumbo banner -->
             <div id="expanded-classroom-cover" class="relative rounded-3xl overflow-hidden p-8 sm:p-12 border border-white/10 shadow-xl bg-gradient-to-br">
               <div class="absolute inset-0 bg-black/20"></div>
               <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h3 id="expanded-class-title" class="text-3xl sm:text-4xl font-extrabold tracking-tight"></h3>
+                  <h3 id="expanded-class-title" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white"></h3>
                   <p id="expanded-class-subject" class="text-white/80 mt-1 text-lg font-medium"></p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex flex-col items-center">
@@ -375,7 +605,7 @@
               </div>
             </div>
 
-            <!-- Tabs: Stream, People, Assignments -->
+            <!-- Sub Navigation Tabs -->
             <div class="flex border-b border-white/5 p-1 gap-4">
               <button onclick="setClassroomTab('stream')" id="subtab-stream" class="text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white">Stream Feed</button>
               <button onclick="setClassroomTab('people')" id="subtab-people" class="text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white">People Directory</button>
@@ -383,22 +613,22 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <!-- Stream & People Section -->
+              <!-- Stream and Details Panels -->
               <div class="lg:col-span-2 space-y-6">
-                <!-- Sub-tab 1: Stream -->
+                <!-- Subtab: Announcements Stream -->
                 <div id="classroom-subtab-stream-panel" class="space-y-6">
-                  <!-- Post Box -->
+                  <!-- Announcement Write Box -->
                   <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
-                    <textarea id="expanded-announcement-textarea" placeholder="Share something with your classroom..." class="w-full bg-[#08081a] border border-white/10 rounded-xl p-4 text-sm focus:outline-none focus:border-violet-500 transition-all h-20 resize-none"></textarea>
+                    <textarea id="expanded-announcement-textarea" placeholder="Share something with your classroom..." class="w-full bg-[#08081a] border border-white/10 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-violet-500 transition-all h-20 resize-none"></textarea>
                     <div class="flex justify-end mt-3">
                       <button onclick="handlePostAnnouncement()" class="bg-violet-600 hover:bg-violet-500 text-xs font-semibold px-4 py-2 rounded-xl transition-all">Post Announcement</button>
                     </div>
                   </div>
-                  <!-- Renders Feed -->
+                  <!-- Announcements list feed -->
                   <div id="expanded-announcements-feed" class="space-y-4"></div>
                 </div>
 
-                <!-- Sub-tab 2: People -->
+                <!-- Subtab: People Directory -->
                 <div id="classroom-subtab-people-panel" class="hidden space-y-6">
                   <div>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-white/40 mb-3">Teachers</h3>
@@ -410,7 +640,7 @@
                   </div>
                 </div>
 
-                <!-- Sub-tab 3: Classroom Assignments -->
+                <!-- Subtab: Classroom Assignments -->
                 <div id="classroom-subtab-assignments-panel" class="hidden space-y-4">
                   <div class="flex items-center justify-between">
                     <h3 class="text-sm font-semibold text-white/60">Classwork List</h3>
@@ -420,7 +650,7 @@
                 </div>
               </div>
 
-              <!-- Sidebar deadlines -->
+              <!-- Deadlines side cards -->
               <div class="space-y-6">
                 <div class="bg-white/4 border border-white/6 rounded-2xl p-5">
                   <h4 class="font-bold text-sm text-white/80 border-b border-white/5 pb-2 mb-3">Upcoming Tasks</h4>
@@ -431,7 +661,7 @@
           </div>
         </div>
 
-        <!-- ==================== TAB: ASSIGNMENTS CENTRAL HUB ==================== -->
+        <!-- ==================== PANEL: ASSIGNMENTS HUB ==================== -->
         <div id="panel-assignments" class="route-panel fade-in space-y-6 hidden">
           <div class="flex items-center justify-between">
             <div>
@@ -440,18 +670,16 @@
             </div>
           </div>
 
-          <!-- Tabs: Upcoming vs Completed -->
+          <!-- Tabs sub navigation -->
           <div class="flex border-b border-white/5 p-1 gap-4">
             <button onclick="setAssignmentTab('upcoming')" id="tab-assign-upcoming" class="text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white">Upcoming Assignments</button>
             <button onclick="setAssignmentTab('completed')" id="tab-assign-completed" class="text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white">Submitted & Graded</button>
           </div>
 
-          <div id="assignments-hub-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Dynamic assignments based on selected sub-tab -->
-          </div>
+          <div id="assignments-hub-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
-        <!-- ==================== TAB: STUDENTS LIST (TEACHER) ==================== -->
+        <!-- ==================== PANEL: STUDENTS DIRECTORY (TEACHER) ==================== -->
         <div id="panel-students" class="route-panel fade-in space-y-6 hidden">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -460,39 +688,37 @@
             </div>
           </div>
 
-          <!-- Aggregation Search Input -->
+          <!-- Live filter -->
           <div class="relative max-w-sm">
             <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"></i>
             <input type="text" id="students-search-input" oninput="handleStudentsSearch(this.value)" placeholder="Search by student name or email..." class="w-full bg-white/4 border border-white/8 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-violet-500 transition-all">
           </div>
 
-          <!-- Aggregated student list -->
+          <!-- Aggregation student list -->
           <div class="rounded-2xl border border-white/6 overflow-hidden">
             <div class="grid grid-cols-12 px-5 py-3 bg-white/3 border-b border-white/5 text-xs font-semibold uppercase tracking-wider text-white/30">
               <div class="col-span-5">Student</div>
               <div class="col-span-4">Email</div>
               <div class="col-span-3">Classes Enrolled</div>
             </div>
-            <div id="students-aggregated-rows" class="divide-y divide-white/5">
-              <!-- Dynamically populated aggregate rows -->
-            </div>
+            <div id="students-aggregated-rows" class="divide-y divide-white/5 bg-[#08081a]/50"></div>
           </div>
 
-          <!-- Classroom roster cards -->
+          <!-- Classroom breakdown size lists -->
           <div class="space-y-3">
             <h2 class="text-sm font-semibold text-white/50 uppercase tracking-wider">Breakdown By Classroom</h2>
             <div id="classroom-aggregated-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
           </div>
         </div>
 
-        <!-- ==================== TAB: PROFILE ==================== -->
+        <!-- ==================== PANEL: PROFILE ==================== -->
         <div id="panel-profile" class="route-panel fade-in space-y-6 hidden">
           <h1 class="text-2xl font-bold">Account Settings</h1>
           <div class="bg-white/4 border border-white/6 rounded-3xl p-8 max-w-2xl">
             <div class="flex items-center gap-4 mb-8">
-              <div id="profile-editor-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-2xl font-bold shadow-lg"></div>
+              <div id="profile-editor-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg"></div>
               <div>
-                <h3 id="profile-editor-badge" class="font-extrabold text-xl"></h3>
+                <h3 id="profile-editor-badge" class="font-extrabold text-xl text-white"></h3>
                 <p id="profile-editor-role" class="text-sm text-violet-400 capitalize font-medium mt-0.5"></p>
               </div>
             </div>
@@ -523,35 +749,35 @@
     </div>
   </div>
 
-  <!-- ==================== DIALOGS / POPUPS ==================== -->
-  <!-- Classroom Modal -->
+  <!-- ==================== POPUPS / MODALS CONTROLLERS ==================== -->
+  <!-- Create/Join Classroom Modal -->
   <div id="modal-class-action" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
     <div class="bg-[#08081a] border border-white/10 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
       <button onclick="closeClassroomModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60"><i data-lucide="x" class="w-4 h-4"></i></button>
       <h3 id="class-modal-title" class="text-xl font-bold mb-4"></h3>
 
       <div class="space-y-4">
-        <!-- Create forms -->
+        <!-- Create classroom options -->
         <div id="modal-class-create-form" class="space-y-3 hidden">
           <div>
             <label class="block text-xs font-semibold text-white/60 mb-1.5">Class Name</label>
-            <input type="text" id="class-input-name" placeholder="e.g. Machine Learning" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
+            <input type="text" id="class-input-name" placeholder="e.g. Computer Networks" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 text-white">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-white/60 mb-1.5">Subject</label>
-            <input type="text" id="class-input-subject" placeholder="e.g. CSE-401" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
+            <label class="block text-xs font-semibold text-white/60 mb-1.5">Subject code</label>
+            <input type="text" id="class-input-subject" placeholder="e.g. CSE-302" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 text-white">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-white/60 mb-1.5">Section / Classroom Room</label>
-            <input type="text" id="class-input-section" placeholder="e.g. Section-A" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
+            <label class="block text-xs font-semibold text-white/60 mb-1.5">Section Room</label>
+            <input type="text" id="class-input-section" placeholder="e.g. Section-A" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 text-white">
           </div>
         </div>
 
-        <!-- Join forms -->
+        <!-- Join classroom options -->
         <div id="modal-class-join-form" class="space-y-3 hidden">
           <div>
             <label class="block text-xs font-semibold text-white/60 mb-1.5">6-Character Classroom Code</label>
-            <input type="text" id="class-input-code" maxlength="6" placeholder="e.g. MS248K" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm font-mono text-center uppercase tracking-wider focus:outline-none focus:border-violet-500">
+            <input type="text" id="class-input-code" maxlength="6" placeholder="e.g. CN302X" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm font-mono text-center uppercase tracking-wider focus:outline-none focus:border-violet-500 text-white">
           </div>
         </div>
 
@@ -571,11 +797,11 @@
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-white/60 mb-1.5">Assignment Title</label>
-          <input type="text" id="assign-input-title" placeholder="e.g. Lab Exercise 3" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500">
+          <input type="text" id="assign-input-title" placeholder="e.g. Lab Exercise 3" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 text-white">
         </div>
         <div>
           <label class="block text-xs font-semibold text-white/60 mb-1.5">Instruction Details</label>
-          <textarea id="assign-input-desc" placeholder="Explain the assignment expectations..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 h-20 resize-none"></textarea>
+          <textarea id="assign-input-desc" placeholder="Explain the assignment expectations..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-violet-500 h-20 resize-none text-white"></textarea>
         </div>
         <div>
           <label class="block text-xs font-semibold text-white/60 mb-1.5">Due Date Deadline</label>
@@ -593,7 +819,7 @@
   <div id="modal-submit-grade" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-sm">
     <div class="bg-[#08081a] border border-white/10 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
       <button onclick="closeSubmitGradeModal()" class="absolute top-4 right-4 p-1.5 rounded-xl hover:bg-white/5 text-white/60"><i data-lucide="x" class="w-4 h-4"></i></button>
-      <h3 id="grade-modal-assign-title" class="text-xl font-bold mb-1"></h3>
+      <h3 id="grade-modal-assign-title" class="text-xl font-bold mb-1 text-white"></h3>
       <p id="grade-modal-assign-date" class="text-xs text-rose-400 font-semibold mb-4"></p>
 
       <div class="space-y-4">
@@ -624,21 +850,20 @@
 
   <!-- JavaScript Application Simulator Engine -->
   <script>
-    // In-memory Database state
+    // Local In-memory Sandbox Database
     let appState = {
-      currentUser: null, // User Object (id, name, email, role)
-      currentView: 'landing', // landing, login, signup, dashboard-layout
-      activeTab: 'dashboard', // dashboard, calendar, classrooms, assignments, students, profile
-      signupRole: 'student', // student, teacher
+      currentUser: null,
+      currentView: 'landing',
+      activeTab: 'dashboard',
+      signupRole: 'student',
       activeClassroomId: null,
       activeAssignmentId: null,
-      classroomSubtab: 'stream', // stream, people, assignments
-      assignmentsHubTab: 'upcoming', // upcoming, completed
+      classroomSubtab: 'stream',
+      assignmentsHubTab: 'upcoming',
       calendarMonthOffset: 0,
       globalSearch: '',
       studentsSearch: '',
-      
-      // Core local database mock
+
       users: [
         { id: 'user-1', name: 'Prof. Arjun Mehta', email: 'arjun@classora.com', role: 'teacher' },
         { id: 'user-2', name: 'Priya Sharma', email: 'priya@iitd.ac.in', role: 'student' },
@@ -668,7 +893,7 @@
             }
           ],
           assignments: [
-            { id: 'assign-1', title: 'OSI Reference Layer Mapping', desc: 'Design a detailed graphic flowchart representing all 7 layers of the OSI model, with protocol instances for each layers.', dueDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0] },
+            { id: 'assign-1', title: 'OSI Reference Layer Mapping', desc: 'Design a detailed graphic flowchart representing all 7 layers of the OSI model, with protocol instances for each layer.', dueDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0] },
             { id: 'assign-2', title: 'TCP/IP Packet Congestion Analysis', desc: 'Read packet logs inside the repository resource folder and write a 2-page response analyzing the TCP congestion window metrics.', dueDate: new Date(Date.now() - 86400000 * 4).toISOString().split('T')[0] }
           ]
         },
@@ -693,7 +918,7 @@
       ]
     };
 
-    // Load persisted state if exists
+    // Load persisted local data
     function loadState() {
       const stored = localStorage.getItem('classora_full_sandbox_state');
       if (stored) {
@@ -716,7 +941,31 @@
       return pts.map(p => p.charAt(0)).slice(0,2).join('').toUpperCase();
     }
 
-    // Date formatting helper
+    // Toggle password visual eyes
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      btn.innerHTML = isPass ? '<i data-lucide="eye-off" class="w-4 h-4"></i>' : '<i data-lucide="eye" class="w-4 h-4"></i>';
+      lucide.createIcons();
+    }
+
+    // Form signup roles switcher
+    function setSignupRole(role) {
+      appState.signupRole = role;
+      const btnStudent = document.getElementById('signup-role-student');
+      const btnTeacher = document.getElementById('signup-role-teacher');
+
+      if (role === 'student') {
+        btnStudent.className = 'text-center py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg';
+        btnTeacher.className = 'text-center py-2 rounded-lg text-sm font-medium transition-all duration-200 text-white/50 hover:text-white/70';
+      } else {
+        btnStudent.className = 'text-center py-2 rounded-lg text-sm font-medium transition-all duration-200 text-white/50 hover:text-white/70';
+        btnTeacher.className = 'text-center py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg';
+      }
+    }
+
+    // Deadlines Status Calculations
     function getDeadlineStatus(dueDateStr) {
       const due = new Date(dueDateStr);
       const now = new Date();
@@ -730,7 +979,7 @@
       return { text: `Due: ${dueDateStr}`, urgent: false, label: 'normal' };
     }
 
-    // Switch views between public site screens & logged-in dashboards
+    // Toggle views layout
     function switchView(view) {
       appState.currentView = view;
       saveState();
@@ -738,7 +987,7 @@
       const publicWrapper = document.getElementById('wrapper-public');
       const authWrapper = document.getElementById('wrapper-auth');
 
-      // Hide all public screens
+      // Hide all public parts
       document.getElementById('page-landing').classList.add('hidden');
       document.getElementById('page-login').classList.add('hidden');
       document.getElementById('page-signup').classList.add('hidden');
@@ -746,7 +995,7 @@
       if (view === 'landing' || view === 'login' || view === 'signup') {
         publicWrapper.classList.remove('hidden');
         authWrapper.classList.add('hidden');
-        
+
         if (view === 'landing') document.getElementById('page-landing').classList.remove('hidden');
         if (view === 'login') document.getElementById('page-login').classList.remove('hidden');
         if (view === 'signup') document.getElementById('page-signup').classList.remove('hidden');
@@ -759,7 +1008,7 @@
       lucide.createIcons();
     }
 
-    // Dynamic navigation menu depending on user role
+    // Dynamic menu paths depending on user roles
     function initSidebarNavigation() {
       const nav = document.getElementById('sidebar-navigation');
       nav.innerHTML = '';
@@ -767,7 +1016,6 @@
       const u = appState.currentUser;
       if (!u) return;
 
-      // Update sidebar avatar & details
       document.getElementById('sidebar-user-name').innerText = u.name;
       document.getElementById('sidebar-user-role').innerText = u.role;
       document.getElementById('sidebar-user-avatar').innerText = getInitials(u.name);
@@ -790,7 +1038,7 @@
         const link = document.createElement('button');
         link.onclick = () => navigateTo(item.tab);
         const isActive = appState.activeTab === item.tab;
-        
+
         link.className = `w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group ${
           isActive
             ? 'bg-violet-600/20 text-violet-300 border border-violet-500/20'
@@ -807,24 +1055,19 @@
       lucide.createIcons();
     }
 
-    // Panel tab switcher routing
+    // Navigation panel switcher
     function navigateTo(tab) {
       appState.activeTab = tab;
       saveState();
 
-      // Hide all panels
       document.querySelectorAll('.route-panel').forEach(p => p.classList.add('hidden'));
-
-      // Active selected nav
       initSidebarNavigation();
 
-      // Show panel
-      const targetPanel = document.getElementById(`panel-${tab}`);
-      if (targetPanel) {
-        targetPanel.classList.remove('hidden');
+      const target = document.getElementById(`panel-${tab}`);
+      if (target) {
+        target.classList.remove('hidden');
       }
 
-      // Load panel elements
       if (tab === 'dashboard') loadDashboardPanel();
       if (tab === 'calendar') renderMonthlyCalendar();
       if (tab === 'classrooms') loadClassroomsPanel();
@@ -835,7 +1078,7 @@
       lucide.createIcons();
     }
 
-    // Direct Quick log-ins
+    // Direct sandbox speed integrations
     function loginAs(role) {
       const u = appState.users.find(x => x.role === role);
       appState.currentUser = u;
@@ -847,19 +1090,19 @@
       switchView('landing');
     }
 
-    // Email/Password login simulation
+    // Submit inputs login
     function submitLogin() {
       const email = document.getElementById('login-email').value.trim();
       const pass = document.getElementById('login-password').value.trim();
 
       if (!email || !pass) {
-        alert('Please fill out all credentials.');
+        alert('Please complete all form inputs.');
         return;
       }
 
       const found = appState.users.find(u => u.email.toLowerCase() === email.toLowerCase());
       if (!found) {
-        alert('User not found. Use "arjun@classora.com" or "priya@iitd.ac.in".');
+        alert('Credentials not found in Sandbox. Use "arjun@classora.com" or "priya@iitd.ac.in".');
         return;
       }
 
@@ -867,39 +1110,23 @@
       switchView('dashboard-layout');
     }
 
-    // Role state for signup
-    function setSignupRole(role) {
-      appState.signupRole = role;
-      const btnStudent = document.getElementById('btn-signup-role-student');
-      const btnTeacher = document.getElementById('btn-signup-role-teacher');
-
-      if (role === 'student') {
-        btnStudent.className = 'flex-1 text-xs font-bold py-2 rounded-lg bg-violet-600 text-white transition-all';
-        btnTeacher.className = 'flex-1 text-xs font-bold py-2 rounded-lg text-white/50 hover:text-white transition-all';
-      } else {
-        btnStudent.className = 'flex-1 text-xs font-bold py-2 rounded-lg text-white/50 hover:text-white transition-all';
-        btnTeacher.className = 'flex-1 text-xs font-bold py-2 rounded-lg bg-violet-600 text-white transition-all';
-      }
-    }
-
-    // Signup form registration
+    // Submit inputs signup
     function submitSignup() {
       const name = document.getElementById('signup-name').value.trim();
       const email = document.getElementById('signup-email').value.trim();
       const pass = document.getElementById('signup-password').value.trim();
 
       if (!name || !email || !pass) {
-        alert('Please fill all signup information.');
+        alert('Please complete all register inputs.');
         return;
       }
 
       const id = 'user-' + Date.now();
       const newUser = { id: id, name: name, email: email, role: appState.signupRole };
-      
+
       appState.users.push(newUser);
       appState.currentUser = newUser;
-      
-      // Auto enroll default student to demo class
+
       if (newUser.role === 'student') {
         appState.classrooms[0].students.push(id);
       }
@@ -908,9 +1135,9 @@
       switchView('dashboard-layout');
     }
 
-    // Global Search interface
-    function handleGlobalSearch(term) {
-      appState.globalSearch = term.toLowerCase();
+    // Global Search helper
+    function handleGlobalSearch(val) {
+      appState.globalSearch = val.toLowerCase();
       if (appState.activeTab === 'classrooms' && !appState.activeClassroomId) {
         loadClassroomsPanel();
       } else if (appState.activeTab === 'dashboard') {
@@ -918,18 +1145,16 @@
       }
     }
 
-    // Global Statistics Calculation & Home panel
+    // Dashboard Home calculations and layouts
     function loadDashboardPanel() {
       const u = appState.currentUser;
       const isTeacher = u.role === 'teacher';
 
-      // Greeting Hour
       const hour = new Date().getHours();
       const greeting = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
       document.getElementById('greeting-time').innerText = greeting;
       document.getElementById('greeting-name').innerText = u.name.split(' ')[0];
 
-      // Total classrooms count
       const activeClasses = appState.classrooms.filter(c => 
         isTeacher ? c.teacherId === u.id : c.students.includes(u.id)
       );
@@ -938,23 +1163,23 @@
         ? `You have ${activeClasses.length} active classroom${activeClasses.length !== 1 ? 's' : ''}`
         : `You are enrolled in ${activeClasses.length} class${activeClasses.length !== 1 ? 'es' : ''}`;
 
-      // Floating header action button
+      // Floating header buttons
       const actions = document.getElementById('dashboard-header-actions');
       if (isTeacher) {
         actions.innerHTML = `
-          <button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all">
+          <button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
             <i data-lucide="plus" class="w-4 h-4"></i> New Classroom
           </button>
         `;
       } else {
         actions.innerHTML = `
-          <button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all">
+          <button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
             <i data-lucide="plus" class="w-4 h-4"></i> Join Class
           </button>
         `;
       }
 
-      // Collect all assignments in visibility scope
+      // Collect all assignments in visible scope
       let userAssignments = [];
       activeClasses.forEach(c => {
         c.assignments.forEach(a => {
@@ -964,9 +1189,7 @@
       });
 
       const upcoming = userAssignments.filter(a => new Date(a.dueDate) > new Date());
-      const completed = userAssignments.filter(a => a.submitted || new Date(a.dueDate) <= new Date());
 
-      // Statistics grid columns mapping
       const stats = isTeacher
         ? [
             { label: 'Total Classes', value: activeClasses.length, icon: 'book-open', color: 'text-violet-400', bg: 'bg-violet-500/10' },
@@ -987,7 +1210,7 @@
           <div class="w-9 h-9 rounded-xl ${s.bg} flex items-center justify-center mb-3">
             <i data-lucide="${s.icon}" class="w-4.5 h-4.5 ${s.color}"></i>
           </div>
-          <div class="text-2xl font-bold">${s.value}</div>
+          <div class="text-2xl font-bold text-white">${s.value}</div>
           <div class="text-sm text-white/50 mt-0.5">${s.label}</div>
         </div>
       `).join('');
@@ -995,13 +1218,13 @@
       // Populate dashboard classes list
       const classroomsContainer = document.getElementById('dashboard-classrooms-list');
       classroomsContainer.innerHTML = '';
-      
+
       const filteredClasses = activeClasses.filter(c => c.name.toLowerCase().includes(appState.globalSearch));
 
       if (filteredClasses.length === 0) {
         classroomsContainer.innerHTML = `
           <div class="text-center py-8">
-            <p class="text-sm text-white/40">No classrooms found in search.</p>
+            <p class="text-sm text-white/40">No classrooms found matching search.</p>
           </div>
         `;
       } else {
@@ -1014,10 +1237,10 @@
               ${c.name.charAt(0)}
             </div>
             <div class="flex-1 min-w-0">
-              <p class="font-medium text-sm truncate">${c.name}</p>
-              <p class="text-xs text-white/40">${c.subject} · ${c.section}</p>
+              <p class="font-medium text-sm text-white truncate">${c.name}</p>
+              <p class="text-xs text-white/40 truncate">${c.subject} · ${c.section}</p>
             </div>
-            <div class="text-xs text-white/30">${c.students.length} students</div>
+            <div class="text-xs text-white/30 flex-shrink-0">${c.students.length} students</div>
             <i data-lucide="arrow-right" class="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors"></i>
           `;
           classroomsContainer.appendChild(card);
@@ -1049,7 +1272,7 @@
                 <i data-lucide="${dl.urgent ? 'alert-circle' : 'clock'}" class="w-4 h-4"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium truncate">${a.title}</p>
+                <p class="text-sm font-medium text-white truncate">${a.title}</p>
                 <p class="text-xs text-white/40 mt-0.5 truncate">${a.className}</p>
                 <p class="text-xs mt-1 font-semibold ${dl.urgent ? 'text-rose-400' : 'text-white/50'}">${dl.text}</p>
               </div>
@@ -1061,7 +1284,7 @@
       lucide.createIcons();
     }
 
-    // Monthly Calendar renderer
+    // Monthly Calendar calculations
     function renderMonthlyCalendar() {
       const grid = document.getElementById('cal-monthly-grid');
       grid.innerHTML = '';
@@ -1079,7 +1302,6 @@
       const firstDay = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
 
-      // Collect current month user assignments
       let monthAssignments = [];
       const userClasses = appState.classrooms.filter(c => 
         u.role === 'teacher' ? c.teacherId === u.id : c.students.includes(u.id)
@@ -1094,14 +1316,12 @@
         });
       });
 
-      // Render placeholders
       for (let i = 0; i < firstDay; i++) {
         const div = document.createElement('div');
         div.className = 'bg-white/[0.01] rounded-2xl min-h-[80px]';
         grid.appendChild(div);
       }
 
-      // Render days
       for (let day = 1; day <= totalDays; day++) {
         const isToday = new Date().getDate() === day && new Date().getMonth() === month && new Date().getFullYear() === year;
         
@@ -1109,7 +1329,6 @@
         cell.className = `p-3 rounded-2xl bg-white/5 border border-white/5 min-h-[85px] hover:bg-white/8 transition-all flex flex-col justify-between group ${isToday ? 'border-violet-500 bg-violet-500/10' : ''}`;
 
         const dayAssigns = monthAssignments.filter(a => a.day === day);
-
         let eventListHtml = '';
         if (dayAssigns.length > 0) {
           eventListHtml = dayAssigns.map(a => `
@@ -1137,12 +1356,11 @@
       renderMonthlyCalendar();
     }
 
-    // Classrooms tab rendering controls
+    // Classrooms views roster
     function loadClassroomsPanel() {
       const u = appState.currentUser;
       const isTeacher = u.role === 'teacher';
 
-      // Load action button mapping
       const btnContainer = document.getElementById('classroom-action-button-container');
       btnContainer.innerHTML = isTeacher
         ? `<button onclick="openClassroomModal()" class="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md"><i data-lucide="plus" class="w-4 h-4"></i> Create Classroom</button>`
@@ -1177,12 +1395,12 @@
                 <span class="text-[10px] font-mono tracking-widest text-violet-400 font-bold bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">${c.code}</span>
                 <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
               </div>
-              <h4 class="font-extrabold text-lg mt-4 group-hover:text-violet-400 transition-colors leading-tight truncate">${c.name}</h4>
+              <h4 class="font-extrabold text-lg mt-4 group-hover:text-violet-400 transition-colors leading-tight truncate text-white">${c.name}</h4>
               <p class="text-xs text-white/50 mt-1 font-medium truncate">${c.subject}</p>
             </div>
             <div class="flex items-center justify-between border-t border-white/5 pt-4">
-              <span class="text-xs text-white/40 font-medium">Instructor: ${c.teacherName}</span>
-              <span class="text-xs text-white/40 flex items-center gap-1 font-medium"><i data-lucide="users" class="w-3.5 h-3.5"></i> ${c.students.length}</span>
+              <span class="text-xs text-white/40 font-medium truncate max-w-[120px]">Instructor: ${c.teacherName}</span>
+              <span class="text-xs text-white/40 flex items-center gap-1 font-medium flex-shrink-0"><i data-lucide="users" class="w-3.5 h-3.5"></i> ${c.students.length}</span>
             </div>
           `;
           grid.appendChild(card);
@@ -1191,7 +1409,7 @@
       lucide.createIcons();
     }
 
-    // Classroom details view expand mapping
+    // Classroom Room Detail view Expand
     function expandClassroom(classId) {
       appState.activeClassroomId = classId;
       document.getElementById('classroom-roster-view').classList.add('hidden');
@@ -1202,11 +1420,9 @@
       document.getElementById('expanded-class-subject').innerText = `${c.subject} · ${c.section}`;
       document.getElementById('expanded-class-code').innerText = c.code;
 
-      // Color backgrounds matching subject names
       const headerJumbo = document.getElementById('expanded-classroom-cover');
       headerJumbo.className = `relative rounded-3xl overflow-hidden p-8 sm:p-12 border border-white/10 shadow-xl bg-gradient-to-br from-violet-600 to-indigo-900`;
 
-      // Set sub-tabs
       setClassroomTab('stream');
       renderClassroomSidebarDeadlines();
     }
@@ -1218,7 +1434,6 @@
       loadClassroomsPanel();
     }
 
-    // Subtabs switcher within classroom page
     function setClassroomTab(subtab) {
       appState.classroomSubtab = subtab;
       
@@ -1230,7 +1445,6 @@
       const panelPeople = document.getElementById('classroom-subtab-people-panel');
       const panelAssign = document.getElementById('classroom-subtab-assignments-panel');
 
-      // Styles reset
       tabStream.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
       tabPeople.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
       tabAssign.className = 'text-sm font-semibold pb-2 border-b-2 border-transparent text-white/60 hover:text-white';
@@ -1255,7 +1469,7 @@
       lucide.createIcons();
     }
 
-    // Stream list feeds inside expanded classroom
+    // Classroom Stream Feed rendering
     function renderClassroomStreamFeed() {
       const feed = document.getElementById('expanded-announcements-feed');
       feed.innerHTML = '';
@@ -1284,9 +1498,9 @@
               <div class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold flex-shrink-0">
                 ${getInitials(comment.author)}
               </div>
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold">${comment.author}</span>
+                  <span class="text-xs font-semibold text-white">${comment.author}</span>
                   <span class="text-[9px] text-white/30">${new Date(comment.date).toLocaleDateString()}</span>
                 </div>
                 <p class="text-xs text-white/70 mt-1 leading-relaxed">${comment.text}</p>
@@ -1301,20 +1515,20 @@
               ${ann.authorAvatar}
             </div>
             <div>
-              <div class="text-sm font-semibold">${ann.author}</div>
-              <div class="text-[10px] text-white/40 mt-0.5">${new Date(ann.date).toLocaleString()}</div>
+              <div class="text-sm font-semibold text-white">${ann.author}</div>
+              <div class="text-[10px] text-white/44 mt-0.5">${new Date(ann.date).toLocaleString()}</div>
             </div>
           </div>
           <p class="text-sm text-white/80 leading-relaxed whitespace-pre-line">${ann.text}</p>
 
-          <!-- Comment input block -->
+          <!-- Comment block -->
           <div class="border-t border-white/5 pt-4 space-y-3">
             <div class="space-y-2">
               ${commentsHtml}
             </div>
             <div class="flex gap-2">
-              <input type="text" id="comment-input-${ann.id}" placeholder="Write a comment..." class="flex-1 bg-[#08081a] border border-white/10 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-violet-500 text-white">
-              <button onclick="postComment('${ann.id}')" class="bg-violet-600 hover:bg-violet-500 text-[10px] font-bold px-3 py-1.5 rounded-lg">Reply</button>
+              <input type="text" id="comment-input-${ann.id}" placeholder="Write a comment..." class="flex-1 bg-[#08081a] border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-violet-500">
+              <button onclick="postComment('${ann.id}')" class="bg-violet-600 hover:bg-violet-500 text-[10px] font-bold px-3 py-1.5 rounded-lg text-white">Reply</button>
             </div>
           </div>
         `;
@@ -1350,7 +1564,6 @@
       const ann = c.announcements.find(a => a.id === annId);
 
       if (!ann.comments) ann.comments = [];
-      
       ann.comments.push({
         author: appState.currentUser.name,
         text: text,
@@ -1362,7 +1575,7 @@
       renderClassroomStreamFeed();
     }
 
-    // Classroom details People tab list
+    // Classroom Directory rendering
     function renderClassroomPeopleTab() {
       const teachersContainer = document.getElementById('classroom-teachers-list');
       const classmatesContainer = document.getElementById('classroom-classmates-list');
@@ -1372,20 +1585,18 @@
 
       const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
 
-      // Render teacher
       const teacherObj = appState.users.find(u => u.id === c.teacherId) || { name: c.teacherName, email: 'instructor@classora.com' };
       const teacherDiv = document.createElement('div');
       teacherDiv.className = 'flex items-center gap-3 p-2 rounded-xl hover:bg-white/5';
       teacherDiv.innerHTML = `
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold">${getInitials(teacherObj.name)}</div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white">${getInitials(teacherObj.name)}</div>
         <div>
-          <span class="text-sm font-semibold">${teacherObj.name}</span>
+          <span class="text-sm font-semibold text-white">${teacherObj.name}</span>
           <span class="text-[10px] text-white/30 block">${teacherObj.email}</span>
         </div>
       `;
       teachersContainer.appendChild(teacherDiv);
 
-      // Render students
       if (c.students.length === 0) {
         classmatesContainer.innerHTML = `<p class="text-xs text-white/30 p-2">No students enrolled yet.</p>`;
       } else {
@@ -1396,9 +1607,9 @@
           const stDiv = document.createElement('div');
           stDiv.className = 'flex items-center gap-3 p-2 rounded-xl hover:bg-white/5';
           stDiv.innerHTML = `
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold">${getInitials(studentObj.name)}</div>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold text-white">${getInitials(studentObj.name)}</div>
             <div>
-              <span class="text-sm font-semibold">${studentObj.name}</span>
+              <span class="text-sm font-semibold text-white">${studentObj.name}</span>
               <span class="text-[10px] text-white/30 block">${studentObj.email}</span>
             </div>
           `;
@@ -1407,7 +1618,7 @@
       }
     }
 
-    // Classroom details Assignments tab list
+    // Classroom inner assignments tab rendering
     function renderClassroomAssignmentsTab() {
       const container = document.getElementById('classroom-inner-assignments-list');
       container.innerHTML = '';
@@ -1415,7 +1626,6 @@
       const isTeacher = appState.currentUser.role === 'teacher';
       const c = appState.classrooms.find(cls => cls.id === appState.activeClassroomId);
 
-      // Assign action button rendering
       const createBtn = document.getElementById('btn-create-assignment-in-class');
       createBtn.innerHTML = isTeacher
         ? `<button onclick="openCreateAssignmentModal()" class="text-xs bg-violet-600/20 text-violet-300 font-semibold px-3 py-1.5 rounded-lg border border-violet-500/30 hover:bg-violet-500 hover:text-white transition-all">+ Assign Work</button>`
@@ -1439,7 +1649,7 @@
 
         div.innerHTML = `
           <div class="min-w-0">
-            <h4 class="font-extrabold text-sm truncate">${a.title}</h4>
+            <h4 class="font-extrabold text-sm text-white truncate">${a.title}</h4>
             <p class="text-xs text-white/45 truncate mt-1 leading-normal">${a.desc}</p>
           </div>
           <span class="text-[9px] sm:text-xs uppercase font-bold px-2 py-1 rounded border self-start sm:self-center ${dl.urgent ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'text-white/50 bg-white/5 border-white/10'}">${dl.text}</span>
@@ -1468,7 +1678,7 @@
           div.onclick = () => openSubmitGradeModal(a.id, c.code);
           div.innerHTML = `
             <div class="flex items-center justify-between gap-2">
-              <span class="text-xs font-bold truncate leading-tight">${a.title}</span>
+              <span class="text-xs font-bold text-white truncate leading-tight">${a.title}</span>
               <span class="text-[9px] font-semibold flex-shrink-0 ${dl.urgent ? 'text-rose-400' : 'text-white/45'}">${dl.text.split(' ')[0]}</span>
             </div>
           `;
@@ -1478,7 +1688,7 @@
       lucide.createIcons();
     }
 
-    // Assignments Central Hub renderer
+    // Assignments Central Hub
     function loadAssignmentsPanel() {
       const list = document.getElementById('assignments-hub-list');
       list.innerHTML = '';
@@ -1487,7 +1697,6 @@
       const isTeacher = u.role === 'teacher';
       const isUpcoming = appState.assignmentsHubTab === 'upcoming';
 
-      // Switch active sub-tabs classes
       const btnUpcoming = document.getElementById('tab-assign-upcoming');
       const btnCompleted = document.getElementById('tab-assign-completed');
 
@@ -1500,7 +1709,6 @@
         btnCompleted.className = 'text-sm font-semibold pb-2 border-b-2 border-violet-500 text-white';
       }
 
-      // Collect all assignments in scope
       let assignmentsList = [];
       const userClasses = appState.classrooms.filter(c => 
         isTeacher ? c.teacherId === u.id : c.students.includes(u.id)
@@ -1513,13 +1721,10 @@
         });
       });
 
-      // Filter list based on selected state
       let filtered = [];
       if (isUpcoming) {
-        // Not submitted, and not passed due date
         filtered = assignmentsList.filter(a => !a.submission);
       } else {
-        // Submitted or past due
         filtered = assignmentsList.filter(a => a.submission || new Date(a.dueDate) <= new Date());
       }
 
@@ -1543,7 +1748,6 @@
         div.onclick = () => openSubmitGradeModal(a.id, a.classCode);
 
         const dl = getDeadlineStatus(a.dueDate);
-        
         let footerHtml = '';
         if (a.submission) {
           footerHtml = `
@@ -1566,7 +1770,7 @@
               <span class="text-[10px] font-mono tracking-widest text-violet-400 font-bold bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">${a.classCode}</span>
               <span class="text-xs text-white/40 truncate max-w-[150px]">${a.className}</span>
             </div>
-            <h4 class="font-bold text-base mt-3 group-hover:text-violet-400 transition-colors truncate leading-tight">${a.title}</h4>
+            <h4 class="font-bold text-base mt-3 group-hover:text-violet-400 transition-colors truncate leading-tight text-white">${a.title}</h4>
             <p class="text-xs text-white/50 mt-1 truncate leading-normal">${a.desc}</p>
           </div>
           ${footerHtml}
@@ -1581,7 +1785,7 @@
       loadAssignmentsPanel();
     }
 
-    // Students aggregated view (Teacher dashboard tab)
+    // Students Directory rendering (Teacher dashboard tab)
     function loadStudentsPanel() {
       const aggregateSubtitle = document.getElementById('students-aggregate-subtitle');
       const tableRows = document.getElementById('students-aggregated-rows');
@@ -1590,7 +1794,6 @@
       tableRows.innerHTML = '';
       cardsGrid.innerHTML = '';
 
-      // Collect all student mapping across all classrooms
       const studentMap = new Map();
       appState.classrooms.forEach(c => {
         c.students.forEach(stId => {
@@ -1630,8 +1833,8 @@
 
           div.innerHTML = `
             <div class="col-span-5 flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold flex-shrink-0">${getInitials(s.name)}</div>
-              <span class="text-sm font-medium truncate">${s.name}</span>
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">${getInitials(s.name)}</div>
+              <span class="text-sm font-medium text-white truncate">${s.name}</span>
             </div>
             <div class="col-span-4 flex items-center gap-1.5 text-sm text-white/40 truncate">
               <i data-lucide="mail" class="w-3.5 h-3.5 flex-shrink-0"></i>
@@ -1645,7 +1848,6 @@
         });
       }
 
-      // Renders aggregate breakdown cards
       appState.classrooms.forEach(c => {
         const div = document.createElement('div');
         div.className = 'p-4 rounded-xl bg-white/4 border border-white/6 flex items-center gap-3';
@@ -1654,11 +1856,11 @@
             <i data-lucide="book-open" class="w-4 h-4 text-violet-400"></i>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium truncate">${c.name}</p>
+            <p class="text-sm font-medium text-white truncate">${c.name}</p>
             <p class="text-xs text-white/40 truncate">${c.subject}</p>
           </div>
           <div class="text-right flex-shrink-0">
-            <div class="text-sm font-semibold">${c.students.length}</div>
+            <div class="text-sm font-semibold text-white">${c.students.length}</div>
             <div class="text-xs text-white/30">students</div>
           </div>
         `;
@@ -1672,7 +1874,7 @@
       loadStudentsPanel();
     }
 
-    // Profile updates management
+    // Profile settings edit layout
     function loadProfilePanel() {
       const u = appState.currentUser;
 
@@ -1690,14 +1892,13 @@
       const email = document.getElementById('profile-input-email').value.trim();
 
       if (!name || !email) {
-        alert('Please fill out all settings fields.');
+        alert('Please complete all form options.');
         return;
       }
 
       appState.currentUser.name = name;
       appState.currentUser.email = email;
 
-      // Update in base users index
       const found = appState.users.find(u => u.id === appState.currentUser.id);
       if (found) {
         found.name = name;
@@ -1709,7 +1910,7 @@
       navigateTo('profile');
     }
 
-    // Classroom Modals: Create / Join classrooms
+    // Classroom Popups Action modal controllers
     function openClassroomModal() {
       const modal = document.getElementById('modal-class-action');
       const title = document.getElementById('class-modal-title');
@@ -1750,7 +1951,6 @@
         }
 
         const code = Math.random().toString(36).substring(2,8).toUpperCase();
-        
         appState.classrooms.push({
           id: 'cls-' + Date.now(),
           name: name,
@@ -1776,7 +1976,6 @@
           return;
         }
 
-        // Enroll
         if (!target.students.includes(appState.currentUser.id)) {
           target.students.push(appState.currentUser.id);
         }
@@ -1791,7 +1990,7 @@
       }
     }
 
-    // Create Assignment Modals
+    // Assignment creation modallers
     function openCreateAssignmentModal() {
       document.getElementById('modal-create-assign').classList.remove('hidden');
       lucide.createIcons();
@@ -1827,14 +2026,13 @@
       setClassroomTab('assignments');
     }
 
-    // Turn In assignment and evaluate grading modals
+    // Assignment Turn In and teacher evaluations
     function openSubmitGradeModal(assignId, classCode) {
       appState.activeAssignmentId = assignId;
       
       const modal = document.getElementById('modal-submit-grade');
       modal.classList.remove('hidden');
 
-      // Find assignment
       let targetAssign = null;
       let targetClass = null;
       appState.classrooms.forEach(c => {
@@ -1858,7 +2056,6 @@
         studentBlock.classList.remove('hidden');
         teacherBlock.classList.add('hidden');
 
-        // Check submission status
         const sub = appState.submissions.find(s => s.assignmentId === assignId && s.studentId === appState.currentUser.id);
         const inputUrl = document.getElementById('grade-modal-submit-url');
         const btn = document.getElementById('grade-modal-submit-btn');
@@ -1897,7 +2094,7 @@
     function submitAssignmentLink() {
       const url = document.getElementById('grade-modal-submit-url').value.trim();
       if (!url) {
-        alert('Please specify a repository or cloud document link.');
+        alert('Please specify a submission repository or cloud document link.');
         return;
       }
 
@@ -1922,7 +2119,7 @@
       const list = appState.submissions.filter(s => s.assignmentId === assignId);
 
       if (list.length === 0) {
-        feed.innerHTML = `<p class="text-xs text-white/30 text-center py-4">No submissions received from student classmates yet.</p>`;
+        feed.innerHTML = `<p class="text-xs text-white/30 text-center py-4">No submissions received from students yet.</p>`;
         return;
       }
 
@@ -1932,7 +2129,7 @@
         
         div.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold">${s.studentName}</span>
+            <span class="text-xs font-bold text-white">${s.studentName}</span>
             <span class="text-[10px] text-white/40">${new Date(s.submittedAt).toLocaleDateString()}</span>
           </div>
           <a href="${s.submitUrl}" target="_blank" class="text-xs text-violet-400 hover:underline flex items-center gap-1 font-mono truncate"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> ${s.submitUrl}</a>
@@ -1954,7 +2151,7 @@
       }
     }
 
-    // Init Core
+    // Initialize Sandbox Prototype Engine
     window.onload = () => {
       loadState();
       switchView(appState.currentUser ? 'dashboard-layout' : 'landing');
