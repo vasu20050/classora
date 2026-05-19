@@ -51,10 +51,10 @@ export async function POST(req: NextRequest) {
       data: { user: user.toJSON(), token },
       message: 'Logged in successfully',
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[LOGIN ERROR]', error);
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: error.message || 'Internal server error' },
       { status: 500 }
     );
   }
