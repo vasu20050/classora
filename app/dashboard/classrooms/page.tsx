@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Classroom } from '@/types';
 import { BookOpen, Plus, Users, Code, ArrowRight, Search } from 'lucide-react';
 import { getColorFromString, timeAgo } from '@/lib/utils';
+import { ClassroomCard } from '@/components/shared/ClassroomCard';
 
 export default function ClassroomsPage() {
   const { user, token } = useAuth();
@@ -95,50 +96,8 @@ export default function ClassroomsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 stagger">
           {filtered.map((classroom) => {
             const color = getColorFromString(classroom.name);
-            const teacher = typeof classroom.teacher === 'object' ? classroom.teacher : null;
             return (
-              <Link
-                key={classroom._id}
-                href={`/dashboard/classrooms/${classroom._id}`}
-                className="group block rounded-2xl border border-white/6 bg-white/4 hover:border-white/12 hover:bg-white/6 transition-all duration-200 overflow-hidden hover:-translate-y-1"
-              >
-                {/* Cover gradient */}
-                <div className={`h-28 bg-gradient-to-br ${color} relative`}>
-                  <div className="absolute inset-0 bg-black/10" />
-                  <div className="absolute top-4 left-4">
-                    <h3 className="text-white font-bold text-lg leading-tight">{classroom.name}</h3>
-                    <p className="text-white/70 text-sm">{classroom.subject}</p>
-                  </div>
-                  {isTeacher && classroom.code && (
-                    <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/20 rounded-lg px-2 py-1">
-                      <Code className="w-3 h-3 text-white/70" />
-                      <span className="text-xs font-mono text-white/80">{classroom.code}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Card body */}
-                <div className="p-4">
-                  {classroom.section && (
-                    <p className="text-xs text-white/40 mb-3">Section {classroom.section}</p>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs text-white/50">
-                      <Users className="w-3.5 h-3.5" />
-                      {classroom.students?.length || 0} students
-                    </div>
-                    {teacher && (
-                      <div className="text-xs text-white/40">
-                        {isTeacher ? 'You' : teacher.name}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mt-3 flex items-center justify-between">
-                    <p className="text-xs text-white/30">{timeAgo(classroom.createdAt)}</p>
-                    <ArrowRight className="w-4 h-4 text-white/30 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                </div>
-              </Link>
+              <ClassroomCard key={classroom._id} classroom={classroom} color={color} />
             );
           })}
         </div>
