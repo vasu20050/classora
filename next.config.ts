@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 
 
+
 const nextConfig: NextConfig = {
   // Enable experimental server actions (already default in Next 14+)
   experimental: {
